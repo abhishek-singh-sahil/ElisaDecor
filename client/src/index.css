@@ -1,0 +1,68 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary-dark: #17211F;
+  --color-forest: #213A35;
+  --color-bg-warm: #F5F1EA;
+  --color-sand: #E9E1D5;
+  --color-taupe: #B8AA98;
+  --color-text-dark: #242424;
+  --color-accent: #C77B3C;
+  --color-brass: #B79A63;
+  
+  --font-sans: 'Manrope', 'Inter', sans-serif;
+  --font-serif: 'Playfair Display', Georgia, serif;
+}
+
+:root {
+  --background: #F5F1EA;
+  --foreground: #242424;
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: 'Manrope', sans-serif;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+}
+
+.text-stroke-brass {
+  -webkit-text-stroke: 1px #B79A63;
+  color: transparent;
+}
+
+.text-stroke-white {
+  -webkit-text-stroke: 1px rgba(255, 255, 255, 0.4);
+  color: transparent;
+}
+
+.glassmorphism {
+  background: rgba(23, 33, 31, 0.75);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(233, 225, 213, 0.1);
+}
+
+.scrollbar-hidden::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hidden {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.fade-in {
+  animation: fadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

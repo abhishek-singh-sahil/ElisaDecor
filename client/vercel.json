@@ -1,0 +1,14 @@
+{
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "rewrites": [
+    {
+      "source": "/sitemap.xml",
+      "destination": "https://elisadecor-backend.onrender.com/sitemap.xml"
+    },
+    {
+      "source": "/robots.txt",
+      "destination": "https://elisadecor-backend.onrender.com/robots.txt"
+    }
+  ]
+}
