@@ -1,5 +1,5 @@
 {
-  "cleanUrls": true,
+  "$schema": "https://openapi.vercel.sh/vercel.json",
   "trailingSlash": false,
   "rewrites": [
     {
@@ -7,11 +7,7 @@
       "destination": "https://elisadecor-backend.onrender.com/uploads/:path*"
     },
     {
-      "source": "/api/:path*",
-      "destination": "https://elisadecor-backend.onrender.com/api/:path*"
-    },
-    {
-      "source": "/:path*",
+      "source": "/(.*)",
       "destination": "/index.html"
     }
   ]
