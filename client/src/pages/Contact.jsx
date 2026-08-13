@@ -35,6 +35,16 @@ export default function Contact() {
       </div>
     );
   }
+  const getEmbedMapUrl = () => {
+    const url = settings?.googleMapsUrl;
+    if (url && (url.includes('embed') || url.includes('output=embed'))) {
+      return url;
+    }
+    if (settings?.address) {
+      return `https://maps.google.com/maps?q=${encodeURIComponent(settings.address)}&t=&z=14&ie=UTF8&iwloc=&output=embed`;
+    }
+    return '';
+  };
 
   return (
     <div className="bg-bg-warm min-h-screen pb-24 fade-in">
@@ -115,10 +125,10 @@ export default function Contact() {
             </ul>
           </div>
 
-          {settings?.googleMapsUrl && (
+          {getEmbedMapUrl() && (
             <div className="rounded-xl overflow-hidden border border-sand/50 shadow-sm aspect-video bg-zinc-200">
               <iframe
-                src={settings.googleMapsUrl}
+                src={getEmbedMapUrl()}
                 width="100%"
                 height="100%"
                 style={{ border: 0 }}

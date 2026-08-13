@@ -236,11 +236,7 @@ export default function ContactForm({ products }) {
           disabled={loading}
           className="w-full flex items-center justify-center gap-2 bg-forest hover:bg-primary-dark text-white font-bold py-3 rounded text-xs uppercase tracking-wider transition-colors shadow disabled:opacity-50"
         >
-          {loading ? (
-            <Loader2 className="animate-spin" size={14} />
-          ) : (
-            'Send Message'
-          )}
+          {loading && <Loader2 className="animate-spin" size={14} />}
           {loading ? 'Sending message...' : 'Submit Message'}
         </button>
       </div>

@@ -322,12 +322,8 @@ export default function EnquiryModal({ isOpen, onClose, products, initialProduct
                   disabled={loading}
                   className="w-full flex items-center justify-center gap-2 bg-forest hover:bg-primary-dark text-bg-warm font-bold py-3 rounded text-xs uppercase tracking-wider transition-colors shadow disabled:opacity-50"
                 >
-                  {loading ? (
-                    <Loader2 className="animate-spin" size={14} />
-                  ) : (
-                    'Submit Enquiry'
-                  )}
-                  {loading ? 'Processing...' : 'Send Request'}
+                  {loading && <Loader2 className="animate-spin" size={14} />}
+                  {loading ? 'Processing...' : 'Submit Enquiry'}
                 </button>
               </div>
             </form>
