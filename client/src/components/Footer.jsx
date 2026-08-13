@@ -151,7 +151,7 @@ export default function Footer({ settings, products }) {
           <p className="text-[10px] text-zinc-500">
             Website developed and managed by{' '}
             <a
-              href="https://wa.me/919117261314?text=Hi%20Abhishek,%20I%20am%20interested%20in%20website%20and%20software%20development%20works."
+              href="https://wa.me/919117261314?text=Hi%20Abhishek%2C%20I%E2%80%99m%20looking%20to%20build%20a%20website%20or%20software%20for%20my%20business.%20I%E2%80%99d%20like%20to%20discuss%20my%20requirements%20with%20you."
               target="_blank"
               rel="noreferrer"
               className="text-accent hover:underline font-semibold"
