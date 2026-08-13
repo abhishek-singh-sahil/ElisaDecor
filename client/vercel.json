@@ -4,7 +4,11 @@
   "rewrites": [
     {
       "source": "/uploads/:path*",
-      "destination": "https://elisadecor-backend.onrender.com/uploads/:path*"
+      "destination": "https://elisadecor.onrender.com/uploads/:path*"
+    },
+    {
+      "source": "/api/:path*",
+      "destination": "https://elisadecor.onrender.com/api/:path*"
     },
     {
       "source": "/(.*)",
