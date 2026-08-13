@@ -236,6 +236,8 @@ async function seed() {
           description1: 'Founded on the principles of extreme durability, precision manufacturing, and ecological responsibility.',
           ctaText: 'Discover Elisa Decor',
           ctaUrl: '/about',
+          imageLeft: 'https://images.unsplash.com/photo-1618219908412-a29a1bb7b86e?auto=format&fit=crop&w=800&q=80',
+          imageRight: 'https://images.unsplash.com/photo-1533090161767-e6ffed986c88?auto=format&fit=crop&w=600&q=80',
         },
         settings: { layout: 'editorial-asymmetric' },
       },

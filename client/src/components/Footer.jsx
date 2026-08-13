@@ -146,8 +146,20 @@ export default function Footer({ settings, products }) {
 
       {/* Bottom Legal Copyright */}
       <div className="max-w-7xl mx-auto px-6 md:px-8 pt-8 flex flex-col md:flex-row gap-4 justify-between items-center text-xs text-zinc-550">
-        <div>
+        <div className="flex flex-col gap-1.5 text-center md:text-left">
           <p>{settings?.footer?.copyrightText || `© ${new Date().getFullYear()} Elisa Decor. All rights reserved.`}</p>
+          <p className="text-[10px] text-zinc-500">
+            Website developed and managed by{' '}
+            <a
+              href="https://wa.me/919117261314?text=Hi%20Abhishek,%20I%20am%20interested%20in%20website%20and%20software%20development%20works."
+              target="_blank"
+              rel="noreferrer"
+              className="text-accent hover:underline font-semibold"
+            >
+              Abhishek Singh Sahil
+            </a>{' '}
+            phone no. +91 6204635073
+          </p>
         </div>
         <div className="flex gap-6 font-medium">
           <Link to="/privacy-policy" className="hover:text-white transition-colors">

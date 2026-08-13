@@ -431,6 +431,39 @@ export default function AdminHomepage() {
                         />
                       </div>
                     </div>
+
+                    <div className="grid grid-cols-2 gap-4 border-t border-zinc-800 pt-4">
+                      <div>
+                        <label className="block text-[10px] text-zinc-500 font-bold mb-1 uppercase tracking-wider">Left Image (Asymmetric Tall)</label>
+                        <div className="bg-zinc-850/50 p-3 rounded border border-zinc-800 flex items-center justify-between">
+                          <button
+                            type="button"
+                            onClick={() => openMediaPicker(activeSectionIdx, 'imageLeft')}
+                            className="p-1 px-2.5 bg-zinc-800 hover:bg-zinc-700 text-white rounded text-[10px] font-semibold border border-zinc-750 transition-colors"
+                          >
+                            Choose Left
+                          </button>
+                          <span className="text-[9px] text-zinc-500 font-mono truncate max-w-[120px]">
+                            {activeSection.content.imageLeft ? 'Linked' : 'No image'}
+                          </span>
+                        </div>
+                      </div>
+                      <div>
+                        <label className="block text-[10px] text-zinc-500 font-bold mb-1 uppercase tracking-wider">Right Image (Asymmetric Wide)</label>
+                        <div className="bg-zinc-850/50 p-3 rounded border border-zinc-800 flex items-center justify-between">
+                          <button
+                            type="button"
+                            onClick={() => openMediaPicker(activeSectionIdx, 'imageRight')}
+                            className="p-1 px-2.5 bg-zinc-800 hover:bg-zinc-700 text-white rounded text-[10px] font-semibold border border-zinc-750 transition-colors"
+                          >
+                            Choose Right
+                          </button>
+                          <span className="text-[9px] text-zinc-500 font-mono truncate max-w-[120px]">
+                            {activeSection.content.imageRight ? 'Linked' : 'No image'}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 )}
 
