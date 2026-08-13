@@ -299,6 +299,8 @@ export default function ProductDetail() {
         initialProductSlug={product.slug}
         settings={settings}
       />
+      </>
+      )}
     </div>
   );
 }
