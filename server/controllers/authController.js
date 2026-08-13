@@ -53,7 +53,12 @@ export const login = async (req, res) => {
 };
 
 export const logout = async (req, res) => {
-  res.clearCookie('admin_token', { path: '/' });
+  res.clearCookie('admin_token', {
+    path: '/',
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+  });
   return res.json({ success: true, message: 'Logged out successfully' });
 };
 
