@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useParams, Link, useNavigate } from 'react-router-dom';
+import { useParams, Link, useNavigate, useOutletContext } from 'react-router-dom';
 import { Mail, ShieldCheck, ChevronRight, CheckCircle, Loader2 } from 'lucide-react';
 import api from '../api/axios';
 import ProductGallery from '../components/ProductGallery';
@@ -9,6 +9,7 @@ import SEO, { getProductSchema } from '../components/SEO';
 export default function ProductDetail() {
   const { slug } = useParams();
   const navigate = useNavigate();
+  const { settings } = useOutletContext();
 
   const [product, setProduct] = useState(null);
   const [allProducts, setAllProducts] = useState([]);
@@ -288,6 +289,7 @@ export default function ProductDetail() {
         onClose={() => setEnquiryModalOpen(false)}
         products={allProducts}
         initialProductSlug={product.slug}
+        settings={settings}
       />
     </div>
   );

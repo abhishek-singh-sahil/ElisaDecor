@@ -38,10 +38,10 @@ async function seed() {
   await SiteSetting.create({
     brandName: 'Elisa Decor',
     tagline: 'Crafting Premium Spaces with Sophisticated Materials',
-    phone: '+91 98765 43210',
+    phone: '+91 82107 20731',
     email: 'contact@elisadecor.com',
-    address: 'Elisa Decor Corporate Office, Plot 45, Industrial Area, Sector 5, Gandhinagar, Gujarat, India',
-    whatsApp: '+91 98765 43210',
+    address: 'Anshika Plywoods, Manish Hardware Building, Ranchi - Patna Rd, Jhumri Telaiya, Jharkhand 825409',
+    whatsApp: '+91 82107 20731',
     socialUrls: {
       facebook: 'https://facebook.com/elisadecor',
       instagram: 'https://instagram.com/elisadecor',

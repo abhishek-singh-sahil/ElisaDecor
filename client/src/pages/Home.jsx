@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useOutletContext } from 'react-router-dom';
 import { ChevronRight, ArrowRight, ShieldCheck, ArrowUpRight, Loader2 } from 'lucide-react';
 import api from '../api/axios';
 import HeroSlider from '../components/HeroSlider';
 import SEO, { getOrganizationSchema } from '../components/SEO';
 
 export default function Home() {
+  const { settings: globalSettings } = useOutletContext();
   const [homepage, setHomepage] = useState(null);
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -79,6 +80,7 @@ export default function Home() {
                 key={idx}
                 slides={content.slides || []}
                 settings={settings}
+                globalSettings={globalSettings}
                 products={products}
               />
             );

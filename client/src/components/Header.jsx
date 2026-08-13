@@ -166,6 +166,7 @@ export default function Header({ settings, products }) {
         isOpen={enquiryModalOpen}
         onClose={() => setEnquiryModalOpen(false)}
         products={products}
+        settings={settings}
       />
     </>
   );

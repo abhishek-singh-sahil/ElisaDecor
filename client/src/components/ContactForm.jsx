@@ -144,7 +144,7 @@ export default function ContactForm({ products }) {
             required
             value={phone}
             onChange={(e) => setPhone(e.target.value)}
-            placeholder="e.g. +91 9876543210"
+            placeholder="e.g. +91 8210720731"
             className="w-full rounded bg-sand/20 border border-sand px-3 py-2 text-xs text-primary-dark focus:outline-none focus:ring-1 focus:ring-accent"
           />
         </div>
@@ -184,7 +184,7 @@ export default function ContactForm({ products }) {
             type="text"
             value={state}
             onChange={(e) => setState(e.target.value)}
-            placeholder="e.g. Gujarat"
+            placeholder="e.g. Jharkhand"
             className="w-full rounded bg-sand/20 border border-sand px-3 py-2 text-xs text-primary-dark focus:outline-none focus:ring-1 focus:ring-accent"
           />
         </div>

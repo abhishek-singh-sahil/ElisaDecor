@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { X, CheckCircle, Mail, Phone, MapPin, Loader2 } from 'lucide-react';
 import api from '../api/axios';
 
-export default function EnquiryModal({ isOpen, onClose, products, initialProductSlug }) {
+export default function EnquiryModal({ isOpen, onClose, products, initialProductSlug, settings }) {
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
   const [email, setEmail] = useState('');
@@ -132,15 +132,15 @@ export default function EnquiryModal({ isOpen, onClose, products, initialProduct
           <div className="relative space-y-3 text-xs text-zinc-400">
             <div className="flex items-center gap-2">
               <Phone size={12} className="text-accent" />
-              <span className="font-mono">+91 98765 43210</span>
+              <span className="font-mono">{settings?.phone || '+91 82107 20731'}</span>
             </div>
             <div className="flex items-center gap-2">
               <Mail size={12} className="text-accent" />
-              <span className="font-mono">enquiry@elisadecor.com</span>
+              <span className="font-mono">{settings?.email || 'enquiry@elisadecor.com'}</span>
             </div>
             <div className="flex items-center gap-2">
               <MapPin size={12} className="text-accent" />
-              <span>Gujarat, India</span>
+              <span>{settings?.address || 'Anshika Plywoods, Manish Hardware Building, Ranchi - Patna Rd, Jhumri Telaiya, Jharkhand 825409'}</span>
             </div>
           </div>
         </div>
@@ -230,7 +230,7 @@ export default function EnquiryModal({ isOpen, onClose, products, initialProduct
                     required
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
-                    placeholder="e.g. +91 9876543210"
+                    placeholder="e.g. +91 8210720731"
                     className="w-full rounded bg-sand/30 border border-sand/80 px-3 py-2 text-xs text-primary-dark focus:outline-none focus:ring-1 focus:ring-accent"
                   />
                 </div>
@@ -270,7 +270,7 @@ export default function EnquiryModal({ isOpen, onClose, products, initialProduct
                     type="text"
                     value={state}
                     onChange={(e) => setState(e.target.value)}
-                    placeholder="e.g. Gujarat"
+                    placeholder="e.g. Jharkhand"
                     className="w-full rounded bg-sand/30 border border-sand/80 px-3 py-2 text-xs text-primary-dark focus:outline-none focus:ring-1 focus:ring-accent"
                   />
                 </div>

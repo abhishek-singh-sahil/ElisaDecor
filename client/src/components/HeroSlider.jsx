@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { ChevronLeft, ChevronRight, Mail } from 'lucide-react';
 import EnquiryModal from './EnquiryModal';
 
-export default function HeroSlider({ slides, settings, products }) {
+export default function HeroSlider({ slides, settings, globalSettings, products }) {
   const [activeIdx, setActiveIdx] = useState(0);
   const [enquiryModalOpen, setEnquiryModalOpen] = useState(false);
 
@@ -141,6 +141,7 @@ export default function HeroSlider({ slides, settings, products }) {
         isOpen={enquiryModalOpen}
         onClose={() => setEnquiryModalOpen(false)}
         products={products}
+        settings={globalSettings}
       />
     </section>
   );
