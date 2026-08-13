@@ -15,7 +15,7 @@
       "destination": "https://elisadecor-backend.onrender.com/uploads/:path*"
     },
     {
-      "source": "/((?!api|uploads|sitemap.xml|robots.txt).*)",
+      "source": "/:path*",
       "destination": "/index.html"
     }
   ]
