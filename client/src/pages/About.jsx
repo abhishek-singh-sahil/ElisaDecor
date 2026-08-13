@@ -32,7 +32,7 @@ export default function About() {
   }
 
   return (
-    <div className="bg-bg-warm min-h-screen pb-24 fade-in">
+    <div className="bg-bg-warm min-h-screen pt-[72px] pb-24 fade-in">
       <SEO
         title="About Us | Premium Plywood Craftsmanship"
         description="Learn about Elisa Decor - our heritage, quality standards, hardwood core calibration, and vision to shape beautiful, warp-free architectural spaces."

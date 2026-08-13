@@ -32,7 +32,7 @@ export default function Process() {
   ];
 
   return (
-    <div className="bg-bg-warm min-h-screen pb-24 fade-in">
+    <div className="bg-bg-warm min-h-screen pt-[72px] pb-24 fade-in">
       <SEO
         title="Our Manufacturing Process | Calibrated Craftsmanship"
         description="Explore the Elisa Decor manufacturing workflow. Multi-stage hot pressing, vacuum-pressure chemical termite defense, and calibration tests."

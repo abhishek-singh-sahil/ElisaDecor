@@ -46,7 +46,7 @@ export default function Projects() {
   const filteredItems = filter === 'ALL' ? galleryItems : galleryItems.filter((i) => i.category === filter);
 
   return (
-    <div className="bg-bg-warm min-h-screen pb-24 fade-in">
+    <div className="bg-bg-warm min-h-screen pt-[72px] pb-24 fade-in">
       <SEO
         title="Applications Gallery | Real-World Elisa Plywood Work"
         description="See how Elisa Decor calibrated plywood panels form the structural backbone of modular kitchens, wardrobes, offices, and custom furniture."

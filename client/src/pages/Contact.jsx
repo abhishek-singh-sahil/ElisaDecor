@@ -47,7 +47,7 @@ export default function Contact() {
   };
 
   return (
-    <div className="bg-bg-warm min-h-screen pb-24 fade-in">
+    <div className="bg-bg-warm min-h-screen pt-[72px] pb-24 fade-in">
       <SEO
         title="Contact Us | Corporate Headquarters & Locations"
         description="Reach out to Elisa Decor. Contact our corporate sales desk for plywood sheet queries, catalog documents, or direct wholesale dealer coordinates."

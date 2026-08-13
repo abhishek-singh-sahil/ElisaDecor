@@ -66,7 +66,7 @@ export default function ProductDetail() {
   const nextProduct = currentIdx !== -1 ? allProducts[(currentIdx + 1) % allProducts.length] : null;
 
   return (
-    <div className="bg-bg-warm min-h-screen pb-24 fade-in">
+    <div className="bg-bg-warm min-h-screen pt-[72px] pb-24 fade-in">
       <SEO
         title={product.seo?.title || `${product.name} Plywood | Elisa Decor`}
         description={product.seo?.description || product.shortDescription}
