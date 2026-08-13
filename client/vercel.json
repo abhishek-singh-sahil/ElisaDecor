@@ -3,14 +3,6 @@
   "trailingSlash": false,
   "rewrites": [
     {
-      "source": "/sitemap.xml",
-      "destination": "https://elisadecor-backend.onrender.com/sitemap.xml"
-    },
-    {
-      "source": "/robots.txt",
-      "destination": "https://elisadecor-backend.onrender.com/robots.txt"
-    },
-    {
       "source": "/uploads/:path*",
       "destination": "https://elisadecor-backend.onrender.com/uploads/:path*"
     },
