@@ -39,55 +39,63 @@ export default function ProductDetail() {
     fetchData();
   }, [slug]);
 
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-[80vh] text-zinc-500">
-        <Loader2 className="animate-spin text-accent mr-2" size={24} />
-        Loading product details...
-      </div>
-    );
-  }
-
-  if (error || !product) {
-    return (
-      <div className="flex flex-col items-center justify-center min-h-[80vh] text-zinc-500 text-center p-6 space-y-4">
-        <h3 className="text-xl font-serif">Plywood Specification Not Found</h3>
-        <p className="text-sm max-w-xs mx-auto">The page you requested does not exist or may have been archived.</p>
-        <Link to="/" className="px-4 py-2 bg-forest text-bg-warm rounded text-xs font-semibold uppercase tracking-wider">
-          Return Home
-        </Link>
-      </div>
-    );
-  }
+  const getProductFallbackName = (s) => {
+    if (!s) return 'Product';
+    return s
+      .split('-')
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(' ');
+  };
 
   // Switcher Indices Resolving
-  const currentIdx = allProducts.findIndex((p) => p.slug === product.slug);
+  const currentIdx = allProducts.findIndex((p) => p.slug === (product?.slug || slug));
   const prevProduct = currentIdx !== -1 ? allProducts[(currentIdx - 1 + allProducts.length) % allProducts.length] : null;
   const nextProduct = currentIdx !== -1 ? allProducts[(currentIdx + 1) % allProducts.length] : null;
+
+  const fallbackName = getProductFallbackName(slug);
+  const seoTitle = product?.seo?.title || (product ? `${product.name} Plywood | Elisa Decor` : `${fallbackName} Plywood | Elisa Decor`);
+  const seoDesc = product?.seo?.description || product?.shortDescription || `Experience premium craftsmanship with ${fallbackName} by Elisa Decor. High density, waterproof hardwood wood sheet solutions.`;
+  const seoOgTitle = product?.seo?.ogTitle || product?.name || fallbackName;
+  const seoOgDesc = product?.seo?.ogDescription || product?.shortDescription || seoDesc;
 
   return (
     <div className="bg-bg-warm min-h-screen pt-[72px] pb-24 fade-in">
       <SEO
-        title={product.seo?.title || `${product.name} Plywood | Elisa Decor`}
-        description={product.seo?.description || product.shortDescription}
-        canonical={`/products/${product.slug}`}
-        ogTitle={product.seo?.ogTitle || product.name}
-        ogDescription={product.seo?.ogDescription || product.shortDescription}
-        ogImage={product.heroImage?.url}
-        schema={getProductSchema(product)}
+        title={seoTitle}
+        description={seoDesc}
+        canonical={`/products/${slug}`}
+        ogTitle={seoOgTitle}
+        ogDescription={seoOgDesc}
+        ogImage={product?.heroImage?.url}
+        schema={product ? getProductSchema(product) : null}
         type="article"
       />
 
-      {/* 1. Breadcrumbs */}
-      <div className="bg-sand/10 border-b border-sand/40 py-4 px-6 md:px-8">
-        <div className="max-w-7xl mx-auto flex items-center gap-2 text-xs font-semibold text-zinc-550">
-          <Link to="/" className="hover:text-primary-dark transition-colors">HOME</Link>
-          <ChevronRight size={12} className="text-zinc-400" />
-          <span className="text-zinc-400 uppercase">PRODUCTS</span>
-          <ChevronRight size={12} className="text-zinc-400" />
-          <span className="text-primary-dark font-bold uppercase">{product.name}</span>
+      {loading ? (
+        <div className="flex items-center justify-center min-h-[80vh] text-zinc-500">
+          <Loader2 className="animate-spin text-accent mr-2" size={24} />
+          Loading product details...
         </div>
-      </div>
+      ) : error || !product ? (
+        <div className="flex flex-col items-center justify-center min-h-[80vh] text-zinc-500 text-center p-6 space-y-4">
+          <h3 className="text-xl font-serif">Plywood Specification Not Found</h3>
+          <p className="text-sm max-w-xs mx-auto">The page you requested does not exist or may have been archived.</p>
+          <Link to="/" className="px-4 py-2 bg-forest text-bg-warm rounded text-xs font-semibold uppercase tracking-wider">
+            Return Home
+          </Link>
+        </div>
+      ) : (
+        <>
+          {/* 1. Breadcrumbs */}
+          <div className="bg-sand/10 border-b border-sand/40 py-4 px-6 md:px-8">
+            <div className="max-w-7xl mx-auto flex items-center gap-2 text-xs font-semibold text-zinc-550">
+              <Link to="/" className="hover:text-primary-dark transition-colors">HOME</Link>
+              <ChevronRight size={12} className="text-zinc-400" />
+              <span className="text-zinc-400 uppercase">PRODUCTS</span>
+              <ChevronRight size={12} className="text-zinc-400" />
+              <span className="text-primary-dark font-bold uppercase">{product.name}</span>
+            </div>
+          </div>
 
       {/* 2. Main Product Info Area */}
       <div className="max-w-7xl mx-auto px-6 md:px-8 pt-12 grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">

@@ -1,6 +1,6 @@
 import { Helmet } from 'react-helmet-async';
 
-const SITE_URL = import.meta.env.VITE_SITE_URL || 'https://elisadecor.com';
+const SITE_URL = import.meta.env.VITE_SITE_URL || 'https://elisadecor.in';
 const DEFAULT_OG_IMAGE = `${SITE_URL}/og-default.jpg`;
 
 export default function SEO({
