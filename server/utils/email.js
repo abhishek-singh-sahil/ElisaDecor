@@ -26,8 +26,18 @@ const transporter = isMailConfigured
 
 // Helper to send email via Resend HTTP API (Port 443, never blocked by Render Free Tier)
 async function sendViaResend(from, to, replyTo, subject, html) {
-  // Resend requires verified domains, or uses 'onboarding@resend.dev' for free sandbox accounts
-  const fromEmail = process.env.RESEND_FROM || 'onboarding@resend.dev';
+  // Resend requires verified domains. It uses 'onboarding@resend.dev' for free sandbox accounts.
+  let fromEmail = process.env.RESEND_FROM || 'onboarding@resend.dev';
+  
+  // Gmail addresses can never be verified domain senders on Resend, force onboarding@resend.dev as fallback
+  if (fromEmail.includes('@gmail.com')) {
+    fromEmail = 'onboarding@resend.dev';
+  }
+
+  // Ensure it has a nice display name wrapper if not already formatted
+  const formattedFrom = fromEmail.includes('<') 
+    ? fromEmail 
+    : `Elisa Decor <${fromEmail}>`;
   
   const res = await fetch('https://api.resend.com/emails', {
     method: 'POST',
@@ -36,7 +46,7 @@ async function sendViaResend(from, to, replyTo, subject, html) {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      from: fromEmail,
+      from: formattedFrom,
       to: Array.isArray(to) ? to : [to],
       reply_to: replyTo || undefined,
       subject: subject,
