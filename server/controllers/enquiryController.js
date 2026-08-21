@@ -97,12 +97,25 @@ export const createEnquiry = async (req, res) => {
       status: 'NEW',
     });
 
-    // 5. Emails
+    // 5. Emails - Run in parallel with a strict timeout so SMTP hangs don't block the API response
     try {
-      await sendEnquiryEmail(enquiry, settings);
-      await sendCustomerConfirmation(enquiry, settings);
+      const emailPromise = (async () => {
+        try {
+          await Promise.all([
+            sendEnquiryEmail(enquiry, settings),
+            sendCustomerConfirmation(enquiry, settings),
+          ]);
+        } catch (emailErr) {
+          console.error('Email notification dispatch error:', emailErr);
+        }
+      })();
+
+      // Max wait limit of 3.5 seconds
+      const timeoutPromise = new Promise((resolve) => setTimeout(resolve, 3500));
+      
+      await Promise.race([emailPromise, timeoutPromise]);
     } catch (emailErr) {
-      console.error('Email notification error:', emailErr);
+      console.error('Email wrapper error:', emailErr);
     }
 
     return res.json({

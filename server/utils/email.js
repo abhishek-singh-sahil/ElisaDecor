@@ -15,6 +15,12 @@ const transporter = isMailConfigured
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASSWORD,
       },
+      connectionTimeout: 5000, // 5 seconds connection timeout
+      greetingTimeout: 5000,   // 5 seconds greeting timeout
+      socketTimeout: 5000,     // 5 seconds socket inactivity timeout
+      tls: {
+        rejectUnauthorized: false, // Prevents TLS verification hangs on serverless/cloud environments
+      },
     })
   : null;
 
