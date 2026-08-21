@@ -24,6 +24,33 @@ const transporter = isMailConfigured
     })
   : null;
 
+// Helper to send email via Resend HTTP API (Port 443, never blocked by Render Free Tier)
+async function sendViaResend(from, to, replyTo, subject, html) {
+  // Resend requires verified domains, or uses 'onboarding@resend.dev' for free sandbox accounts
+  const fromEmail = process.env.RESEND_FROM || 'onboarding@resend.dev';
+  
+  const res = await fetch('https://api.resend.com/emails', {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${process.env.RESEND_API_KEY}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      from: fromEmail,
+      to: Array.isArray(to) ? to : [to],
+      reply_to: replyTo || undefined,
+      subject: subject,
+      html: html,
+    }),
+  });
+
+  const data = await res.json();
+  if (!res.ok) {
+    throw new Error(data.message || `Resend HTTP Error ${res.status}: ${JSON.stringify(data)}`);
+  }
+  console.log(`Email successfully dispatched to ${to} via Resend HTTP API.`);
+}
+
 export async function sendEnquiryEmail(enquiry, settings) {
   const recipient = settings?.emailSettings?.businessEnquiryEmail || process.env.ENQUIRY_EMAIL;
   if (!recipient) {
@@ -83,6 +110,16 @@ export async function sendEnquiryEmail(enquiry, settings) {
     </div>
   `;
 
+  // Try HTTP-based Resend first if API key is provided (bypasses Render's port blocks)
+  if (process.env.RESEND_API_KEY) {
+    try {
+      await sendViaResend(sender, recipient, replyTo, subject, htmlContent);
+      return;
+    } catch (resendErr) {
+      console.error('Failed to dispatch via Resend HTTP API. Falling back to SMTP:', resendErr.message);
+    }
+  }
+
   if (!transporter) {
     console.log('--- MOCK ENQUIRY EMAIL DISPATCH (SMTP NOT CONFIGURED) ---');
     console.log(`From: ${sender}`);
@@ -130,6 +167,16 @@ export async function sendCustomerConfirmation(enquiry, settings) {
       </p>
     </div>
   `;
+
+  // Try HTTP-based Resend first if API key is provided
+  if (process.env.RESEND_API_KEY) {
+    try {
+      await sendViaResend(sender, enquiry.email, null, subject, htmlContent);
+      return;
+    } catch (resendErr) {
+      console.error('Failed to dispatch confirmation via Resend HTTP API. Falling back to SMTP:', resendErr.message);
+    }
+  }
 
   if (!transporter) {
     console.log('--- MOCK CUSTOMER CONFIRMATION EMAIL (SMTP NOT CONFIGURED) ---');
@@ -188,6 +235,16 @@ export async function sendOTPEmail(email, otp, type) {
       </p>
     </div>
   `;
+
+  // Try HTTP-based Resend first if API key is provided
+  if (process.env.RESEND_API_KEY) {
+    try {
+      await sendViaResend(sender, email, null, subject, htmlContent);
+      return;
+    } catch (resendErr) {
+      console.error('Failed to dispatch OTP via Resend HTTP API. Falling back to SMTP:', resendErr.message);
+    }
+  }
 
   if (!transporter) {
     console.log('---------------------------------------------------------');
