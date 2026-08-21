@@ -19,13 +19,17 @@ export default function EnquiryModal({ isOpen, onClose, products, initialProduct
   const [error, setError] = useState('');
 
   useEffect(() => {
-    if (isOpen && initialProductSlug && products?.length > 0) {
-      const activeProd = products.find((p) => p.slug === initialProductSlug);
-      if (activeProd) {
-        setProductId(activeProd._id);
+    if (isOpen) {
+      setSuccess(false);
+      setError('');
+      if (initialProductSlug && products?.length > 0) {
+        const activeProd = products.find((p) => p.slug === initialProductSlug);
+        if (activeProd) {
+          setProductId(activeProd._id);
+        }
+      } else {
+        setProductId('');
       }
-    } else if (isOpen && !productId && products?.length > 0) {
-      setProductId('');
     }
   }, [isOpen, initialProductSlug, products]);
 
@@ -85,21 +89,21 @@ export default function EnquiryModal({ isOpen, onClose, products, initialProduct
   const activeProductData = products?.find((p) => p._id === productId);
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+    <div className="fixed inset-0 z-50 flex items-end md:items-center justify-center p-0 md:p-4">
       <div
         onClick={onClose}
         className="fixed inset-0 bg-primary-dark/80 backdrop-blur-sm transition-opacity"
       />
 
-      <div className="relative w-full max-w-4xl bg-bg-warm border border-sand rounded-xl overflow-hidden shadow-2xl flex flex-col md:flex-row z-50 max-h-[90vh]">
+      <div className="relative w-full md:max-w-4xl bg-bg-warm border-t md:border border-sand rounded-t-xl md:rounded-xl overflow-hidden shadow-2xl flex flex-col md:flex-row z-50 h-[92vh] md:h-auto md:max-h-[85vh] min-h-0">
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 p-1.5 rounded-full bg-zinc-950/20 text-primary-dark hover:bg-zinc-950/40 hover:text-white transition-colors z-10"
+          className="absolute top-4 right-4 p-1.5 rounded-full bg-zinc-950/20 text-primary-dark hover:bg-zinc-950/40 hover:text-white transition-colors z-20"
         >
           <X size={18} />
         </button>
 
-        <div className="hidden md:flex md:w-5/12 bg-primary-dark text-bg-warm flex-col justify-between p-8 relative overflow-hidden">
+        <div className="hidden md:flex md:w-5/12 bg-primary-dark text-bg-warm flex-col justify-between p-8 relative overflow-hidden flex-shrink-0">
           <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1540518614846-7eded433c457?auto=format&fit=crop&w=800&q=80')] bg-cover opacity-15 mix-blend-overlay" />
           
           <div className="relative space-y-4">
@@ -145,7 +149,7 @@ export default function EnquiryModal({ isOpen, onClose, products, initialProduct
           </div>
         </div>
 
-        <div className="w-full md:w-7/12 p-6 md:p-8 overflow-y-auto flex flex-col justify-center">
+        <div className="w-full md:w-7/12 p-6 md:p-8 overflow-y-auto flex flex-col justify-start md:justify-center min-h-0">
           {success ? (
             <div className="text-center py-10 space-y-4">
               <CheckCircle className="mx-auto h-16 w-16 text-emerald-600" />
