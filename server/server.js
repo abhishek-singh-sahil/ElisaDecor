@@ -14,7 +14,7 @@ import mediaRoutes from './routes/mediaRoutes.js';
 import settingsRoutes from './routes/settingsRoutes.js';
 import seoRoutes from './routes/seoRoutes.js';
 import helmet from 'helmet';
-import rateLimit from 'express-rate-limit';
+import { generalLimiter } from './middleware/rateLimiter.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -28,23 +28,7 @@ app.use(helmet({
   contentSecurityPolicy: false,
 }));
 
-const generalLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000,
-  max: 200,
-  standardHeaders: true,
-  legacyHeaders: false,
-  message: { error: 'Too many requests from this IP, please try again after 15 minutes.' },
-});
 app.use('/api', generalLimiter);
-
-const authLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000,
-  max: 10,
-  standardHeaders: true,
-  legacyHeaders: false,
-  message: { error: 'Too many authentication attempts, please try again after 15 minutes.' },
-});
-app.use('/api/auth', authLimiter);
 
 // ─── CORS ─────────────────────────────────────────────────────────────────────
 const allowedOrigins = [

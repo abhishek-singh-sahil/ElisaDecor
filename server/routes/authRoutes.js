@@ -8,11 +8,12 @@ import {
   confirmEmailChange,
 } from '../controllers/profileController.js';
 import { authenticateAdmin } from '../middleware/auth.js';
+import { authLimiter } from '../middleware/rateLimiter.js';
 
 const router = express.Router();
 
 // General Authentication
-router.post('/login', login);
+router.post('/login', authLimiter, login);
 router.post('/logout', logout);
 router.get('/me', getMe);
 router.get('/dashboard', authenticateAdmin, getDashboardMetrics);
