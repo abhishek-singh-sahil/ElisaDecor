@@ -14,7 +14,7 @@ export default function Footer({ settings, products }) {
               <img
                 src={settings.logo.url}
                 alt={settings.brandName || 'Elisa Decor'}
-                className="h-9 w-auto object-contain"
+                className="h-12 md:h-16 w-auto object-contain"
               />
             ) : (
               <span className="text-xl font-bold tracking-widest text-white font-serif">
@@ -71,6 +71,13 @@ export default function Footer({ settings, products }) {
                 </Link>
               </li>
             ))}
+            {publishedProducts.length > 0 && (
+              <li className="pt-1.5 border-t border-forest/40">
+                <Link to="/products" className="text-accent hover:text-white transition-colors font-semibold">
+                  All Products →
+                </Link>
+              </li>
+            )}
             {publishedProducts.length === 0 && (
               <li className="text-zinc-650 text-xs italic">No products added.</li>
             )}
@@ -86,6 +93,11 @@ export default function Footer({ settings, products }) {
             <li>
               <Link to="/about" className="hover:text-white transition-colors font-medium">
                 About Us
+              </Link>
+            </li>
+            <li>
+              <Link to="/products" className="hover:text-white transition-colors font-medium">
+                Products Range
               </Link>
             </li>
             <li>

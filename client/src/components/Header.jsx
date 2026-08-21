@@ -58,7 +58,7 @@ export default function Header({ settings, products, openEnquiry }) {
               <img
                 src={settings.logo.url}
                 alt={settings.brandName || 'Elisa Decor'}
-                className="h-9 w-auto object-contain"
+                className="h-12 md:h-16 w-auto object-contain"
               />
             ) : (
               <span
