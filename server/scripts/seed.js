@@ -7,8 +7,26 @@ import Homepage from '../models/Homepage.js';
 import Product from '../models/Product.js';
 import FAQ from '../models/FAQ.js';
 import Testimonial from '../models/Testimonial.js';
+import Media from '../models/Media.js';
 
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/elisadecor';
+
+async function createMediaRecord(url, filename, title = '', altText = '') {
+  return await Media.create({
+    url,
+    publicId: `seeded-${filename.split('.')[0]}-${Math.random().toString(36).substring(7)}`,
+    filename,
+    originalFilename: filename,
+    mimeType: 'image/jpeg',
+    width: 1200,
+    height: 800,
+    size: 250000,
+    altText: altText || title,
+    title: title,
+    caption: title,
+    folder: 'seeding',
+  });
+}
 
 async function seed() {
   console.log('Connecting to database...');
@@ -22,6 +40,7 @@ async function seed() {
   await Product.deleteMany({});
   await FAQ.deleteMany({});
   await Testimonial.deleteMany({});
+  await Media.deleteMany({});
   console.log('Database cleaned.');
 
   // 1. Create Default Admin User
@@ -34,10 +53,151 @@ async function seed() {
   });
   console.log(`Default Super Admin created: ${admin.email} (password: admin123)`);
 
-  // 2. Create Site Settings
+  // 2. Seed High-Quality Architectural Wood Media Assets
+  console.log('Seeding realistic Media assets...');
+  
+  // Logos / Brand Graphics
+  const logoMedia = await createMediaRecord(
+    'https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=400&h=150&q=80',
+    'elisa-logo.jpg',
+    'Elisa Decor Logo',
+    'Elisa Decor Premium Wood Solutions Logo'
+  );
+  
+  const faviconMedia = await createMediaRecord(
+    'https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=64&h=64&q=80',
+    'favicon.jpg',
+    'Elisa Decor Favicon'
+  );
+
+  // Elisa Green (Moisture Resistant & BWR Plywood) Images
+  const greenHero = await createMediaRecord(
+    'https://images.unsplash.com/photo-1533090161767-e6ffed986c88?auto=format&fit=crop&w=1200&q=80',
+    'elisa-green-hero.jpg',
+    'Elisa Green Calibrated BWR Plywood Stack',
+    'High quality stack of calibrated plywood sheets displaying smooth outer wood layers.'
+  );
+  const greenMobileHero = await createMediaRecord(
+    'https://images.unsplash.com/photo-1533090161767-e6ffed986c88?auto=format&fit=crop&w=800&q=80',
+    'elisa-green-mobile-hero.jpg',
+    'Elisa Green Mobile Plywood Banner'
+  );
+  const greenGal1 = await createMediaRecord(
+    'https://images.unsplash.com/photo-1558882224-cca166733360?auto=format&fit=crop&w=800&q=80',
+    'elisa-green-wardrobe.jpg',
+    'Luxury Walk-in Wardrobe Closet Structure',
+    'Premium walk-in closet carcass built using Elisa Green calibrated BWR boards.'
+  );
+  const greenGal2 = await createMediaRecord(
+    'https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=800&q=80',
+    'elisa-green-office.jpg',
+    'Office Lounge Furniture Frames',
+    'Durable structural wood framing inside modern corporate seating lounges.'
+  );
+  const greenApp1 = await createMediaRecord(
+    'https://images.unsplash.com/photo-1558882224-cca166733360?auto=format&fit=crop&w=600&q=80',
+    'elisa-green-wardrobes.jpg',
+    'Modular Bedroom Wardrobes'
+  );
+  const greenApp2 = await createMediaRecord(
+    'https://images.unsplash.com/photo-1538688525198-9b88f6f53126?auto=format&fit=crop&w=600&q=80',
+    'elisa-green-panels.jpg',
+    'Warp-Free Wall Paneling and Partitions'
+  );
+  const greenApp3 = await createMediaRecord(
+    'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=600&q=80',
+    'elisa-green-furniture.jpg',
+    'Calibrated Living Room Furniture'
+  );
+
+  // Elisa Club 710 (BWP Marine Plywood) Images
+  const clubHero = await createMediaRecord(
+    'https://images.unsplash.com/photo-1556911220-e15b29be8c8f?auto=format&fit=crop&w=1200&q=80',
+    'elisa-club-hero.jpg',
+    'Luxury Modular Kitchen Carcass',
+    'Modern modular kitchen using Elisa Club 710 Boiling Water Proof marine grade boards.'
+  );
+  const clubMobileHero = await createMediaRecord(
+    'https://images.unsplash.com/photo-1556911220-e15b29be8c8f?auto=format&fit=crop&w=800&q=80',
+    'elisa-club-mobile-hero.jpg',
+    'Elisa Club 710 Mobile Kitchen Banner'
+  );
+  const clubGal1 = await createMediaRecord(
+    'https://images.unsplash.com/photo-1620626011761-996317b69766?auto=format&fit=crop&w=800&q=80',
+    'elisa-club-vanity.jpg',
+    'Waterproof Bathroom Vanity Counter',
+    'Bathroom vanity cabinet utilizing high-densityPF resin bonded marine plywood.'
+  );
+  const clubGal2 = await createMediaRecord(
+    'https://images.unsplash.com/photo-1567899378494-47b22a2ae96a?auto=format&fit=crop&w=800&q=80',
+    'elisa-club-yacht.jpg',
+    'Yacht Wooden Deck & Cabinetry',
+    'Luxury yacht interior paneling conforming to BWP Marine grade IS:710 specifications.'
+  );
+  const clubApp1 = await createMediaRecord(
+    'https://images.unsplash.com/photo-1556911220-e15b29be8c8f?auto=format&fit=crop&w=600&q=80',
+    'elisa-club-kitchen.jpg',
+    'BWP Modular Kitchen Cabinetry'
+  );
+  const clubApp2 = await createMediaRecord(
+    'https://images.unsplash.com/photo-1620626011761-996317b69766?auto=format&fit=crop&w=600&q=80',
+    'elisa-club-bathrooms.jpg',
+    'Moisture-Proof Bathroom Vanities'
+  );
+  const clubApp3 = await createMediaRecord(
+    'https://images.unsplash.com/photo-1567899378494-47b22a2ae96a?auto=format&fit=crop&w=600&q=80',
+    'elisa-club-marine.jpg',
+    'Vessel Cabins & Yacht Decking'
+  );
+
+  // Elisa Premium (Exotic Surface Boards) Images
+  const premHero = await createMediaRecord(
+    'https://images.unsplash.com/photo-1540518614846-7eded433c457?auto=format&fit=crop&w=1200&q=80',
+    'elisa-premium-hero.jpg',
+    'Designer Wood Paneled Hotel Lobby',
+    'Custom lobby interior wall panels showcasing premium high-end pre-laminated boards.'
+  );
+  const premMobileHero = await createMediaRecord(
+    'https://images.unsplash.com/photo-1540518614846-7eded433c457?auto=format&fit=crop&w=800&q=80',
+    'elisa-premium-mobile-hero.jpg',
+    'Elisa Premium Mobile Wall Banner'
+  );
+  const premGal1 = await createMediaRecord(
+    'https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=800&q=80',
+    'elisa-premium-office.jpg',
+    'Executive Boardroom Paneling',
+    'Conference room walls detailed with fine decorative wood veneer panels.'
+  );
+  const premGal2 = await createMediaRecord(
+    'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=800&q=80',
+    'elisa-premium-bedroom.jpg',
+    'Luxury Bedroom Console and Bed Backing',
+    'Exclusive wood surfaces supporting designer bedside panel alignments.'
+  );
+  const premApp1 = await createMediaRecord(
+    'https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=600&q=80',
+    'elisa-premium-lobbies.jpg',
+    'Corporate Lobbies & Conference Walls'
+  );
+  const premApp2 = await createMediaRecord(
+    'https://images.unsplash.com/photo-1618219908412-a29a1bb7b86e?auto=format&fit=crop&w=600&q=80',
+    'elisa-premium-veneer.jpg',
+    'High-End Furniture Veneer Backing'
+  );
+  const premApp3 = await createMediaRecord(
+    'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=600&q=80',
+    'elisa-premium-residential.jpg',
+    'Luxury Residential Custom Joinery'
+  );
+
+  console.log('All Media assets saved.');
+
+  // 3. Create Site Settings
   await SiteSetting.create({
     brandName: 'Elisa Decor',
     tagline: 'Crafting Premium Spaces with Sophisticated Materials',
+    logo: logoMedia._id,
+    favicon: faviconMedia._id,
     phone: '+91 82107 20731',
     email: 'contact@elisadecor.com',
     address: 'Anshika Plywoods, Manish Hardware Building, Ranchi - Patna Rd, Jhumri Telaiya, Jharkhand 825409',
@@ -56,6 +216,7 @@ async function seed() {
       description: 'Experience the ultimate in architectural craftsmanship with Elisa Decor. Premium eco-friendly plywood, Club 710 marine grade wood, and designer panels for premium residential and commercial interiors.',
       ogTitle: 'Elisa Decor | Premium Interior Wood Solutions',
       ogDescription: 'Experience the ultimate in architectural craftsmanship with Elisa Decor. Premium eco-friendly plywood, Club 710 marine grade wood, and designer panels.',
+      ogImage: greenHero._id,
     },
     emailSettings: {
       businessEnquiryEmail: 'enquiry@elisadecor.com',
@@ -86,13 +247,16 @@ async function seed() {
   });
   console.log('Site settings seeded.');
 
-  // 3. Create 3 Products (same data as original seed)
+  // 4. Create 3 Products linked to Media
   const p1 = await Product.create({
     name: 'Elisa Green',
     slug: 'elisa-green',
     productCode: 'ELG-MR-01',
     shortDescription: 'High-density, premium moisture-resistant plywood engineered for long-lasting interiors.',
     longDescription: 'Elisa Green is our premium eco-friendly Commercial MR (Moisture Resistant) and BWR (Boiling Water Resistant) grade plywood. Manufactured using high-quality hardwood timber and bonded with synthetic MUF resin, it provides exceptional stability, resistance to termites, and zero core gap.',
+    heroImage: greenHero._id,
+    mobileHeroImage: greenMobileHero._id,
+    gallery: [greenGal1._id, greenGal2._id],
     features: [
       { title: 'Eco-Friendly / Low Emission', description: 'Certified E1 emission standard ensuring healthy indoor air quality.', icon: 'Leaf' },
       { title: 'Termite & Borer Resistant', description: 'Treated with advanced chemical preservatives to prevent insect damage.', icon: 'ShieldAlert' },
@@ -107,9 +271,9 @@ async function seed() {
       { key: 'Thickness Options', value: '6mm, 9mm, 12mm, 16mm, 19mm' },
     ],
     applications: [
-      { title: 'Residential Wardrobes', description: 'Perfect structural strength for durable closets and custom cabinetry.' },
-      { title: 'Wall Paneling & Partitions', description: 'High stability reduces warp in large vertical installations.' },
-      { title: 'Living Room Furniture', description: 'Seamless screw holding capacity for modern sofas, beds, and tables.' },
+      { title: 'Residential Wardrobes', description: 'Perfect structural strength for durable closets and custom cabinetry.', image: greenApp1._id },
+      { title: 'Wall Paneling & Partitions', description: 'High stability reduces warp in large vertical installations.', image: greenApp2._id },
+      { title: 'Living Room Furniture', description: 'Seamless screw holding capacity for modern sofas, beds, and tables.', image: greenApp3._id },
     ],
     benefits: [
       'High resistance to changing weather and humidity conditions',
@@ -125,6 +289,7 @@ async function seed() {
     seo: {
       title: 'Elisa Green Plywood | BWR Grade Premium Hardwood Board',
       description: 'Elisa Green is a premium BWR grade hardwood plywood with zero core gaps, termite resistance, and low formaldehyde emissions.',
+      ogImage: greenHero._id,
     },
   });
 
@@ -134,6 +299,9 @@ async function seed() {
     productCode: 'ELC-BWP-710',
     shortDescription: 'Super premium, 100% waterproof Marine-Grade plywood designed for extreme environments.',
     longDescription: 'Elisa Club 710 is our flagship architectural-grade BWP (Boiling Water Proof) Marine Plywood. Built with carefully selected premium tropical hardwood and bonded with un-extended Phenol Formaldehyde resin at high pressure.',
+    heroImage: clubHero._id,
+    mobileHeroImage: clubMobileHero._id,
+    gallery: [clubGal1._id, clubGal2._id],
     features: [
       { title: '100% Waterproof (BWP)', description: 'Can withstand continuous exposure to boiling water without layer separation.', icon: 'Droplets' },
       { title: 'Glueshield Technology', description: 'Bonded with high-quality Phenol Formaldehyde resin for permanent adhesion.', icon: 'Wrench' },
@@ -148,9 +316,9 @@ async function seed() {
       { key: 'Thickness Options', value: '6mm, 9mm, 12mm, 16mm, 19mm, 25mm' },
     ],
     applications: [
-      { title: 'Modular Kitchen Cabinets', description: 'Excellent resistance to moisture, steam, and heavy storage loads.' },
-      { title: 'Bathroom Vanity Structures', description: 'Unaffected by direct contact with water, splash, and high humidity.' },
-      { title: 'Yachts & Marine Interior', description: 'Meets rigorous standards for marine crafts and seaside villas.' },
+      { title: 'Modular Kitchen Cabinets', description: 'Excellent resistance to moisture, steam, and heavy storage loads.', image: clubApp1._id },
+      { title: 'Bathroom Vanity Structures', description: 'Unaffected by direct contact with water, splash, and high humidity.', image: clubApp2._id },
+      { title: 'Yachts & Marine Interior', description: 'Meets rigorous standards for marine crafts and seaside villas.', image: clubApp3._id },
     ],
     benefits: [
       'Engineered using premium tropical hardwood for superior density and weight',
@@ -166,6 +334,7 @@ async function seed() {
     seo: {
       title: 'Elisa Club 710 | Premium IS:710 BWP Marine Plywood',
       description: 'Discover Elisa Club 710 Marine Grade BWP Plywood. 100% waterproof, termite proof, tropical hardwood, designed for modular kitchens and luxury bathrooms.',
+      ogImage: clubHero._id,
     },
   });
 
@@ -174,7 +343,10 @@ async function seed() {
     slug: 'elisa-premium',
     productCode: 'ELP-DECOR-03',
     shortDescription: 'Premium decorative panels and custom plywood sheets for high-end interiors.',
-    longDescription: 'This is a premium product slot for Elisa Decor\'s upcoming plywood or decorative wood range. The specifications, detailed descriptions, gallery, and FAQs can be customized via the Admin CMS panel.',
+    longDescription: 'Elisa Premium represents our designer architectural wood range. Suited for architectural feature walls, entry lobbies, and luxury custom furniture veneering.',
+    heroImage: premHero._id,
+    mobileHeroImage: premMobileHero._id,
+    gallery: [premGal1._id, premGal2._id],
     features: [
       { title: 'Dynamic Customization', description: 'Fully configurable features, tags, and descriptive copy via CMS.', icon: 'Settings' },
       { title: 'Premium Aesthetics', description: 'Engineered for high-end designer finishes and surface styling.', icon: 'Sparkles' },
@@ -183,12 +355,19 @@ async function seed() {
     specifications: [
       { key: 'Grade', value: 'Premium Grade' },
       { key: 'Standard Sizes', value: '8ft x 4ft sheets' },
+      { key: 'Timber Type', value: 'Selected Exotic Hardwood' },
+      { key: 'Veneer Compatibility', value: 'Optimized for raw veneers and high pressure laminates' },
     ],
     applications: [
-      { title: 'Designer Interiors', description: 'Premium visual paneling for custom lounges, offices, and entrance lobbies.' },
-      { title: 'Luxury Furniture', description: 'Perfect backing material for high-end veneer and laminate work.' },
+      { title: 'Designer Interiors', description: 'Premium visual paneling for custom lounges, offices, and entrance lobbies.', image: premApp1._id },
+      { title: 'Luxury Furniture', description: 'Perfect backing material for high-end veneer and laminate work.', image: premApp2._id },
+      { title: 'Bespoke Joinery', description: 'Perfect structural support for premium cabinet doors and shelving.', image: premApp3._id },
     ],
-    benefits: ['Customizable product parameters', 'Designed to accommodate exotic veneers', 'Perfect structural support for premium joinery'],
+    benefits: [
+      'Customizable product parameters',
+      'Designed to accommodate exotic veneers',
+      'Perfect structural support for premium joinery',
+    ],
     faqs: [
       { question: 'What is Elisa Premium?', answer: 'Elisa Premium is the third product range from Elisa Decor, fully manageable from the CMS.' },
     ],
@@ -197,11 +376,13 @@ async function seed() {
     seo: {
       title: 'Elisa Premium Plywood | Custom Interior Materials',
       description: 'Elisa Premium is the upcoming product category from Elisa Decor. Fully customizable via our administrative panel.',
+      ogImage: premHero._id,
     },
   });
-  console.log(`Seeded 3 products: ${p1.name}, ${p2.name}, ${p3.name}`);
 
-  // 4. Homepage CMS sections
+  console.log(`Seeded 3 products with complete Media assets: ${p1.name}, ${p2.name}, ${p3.name}`);
+
+  // 5. Homepage CMS sections with 3 Slides matching the 3 Products
   await Homepage.create({
     sections: [
       {
@@ -211,12 +392,36 @@ async function seed() {
         content: {
           slides: [
             {
-              title: 'Architectural Wood Solutions',
-              subtitle: 'Precision Engineered. Beautifully Crafted.',
+              title: 'Elisa Club 710 Plywood',
+              subtitle: '100% Waterproof BWP Marine-Grade',
               eyebrow: 'ELISA DECOR',
-              description: 'We manufacture premium plywood engineered for modular kitchens, luxury wardrobes, and high-performance commercial interiors.',
-              ctaText1: 'Explore Range',
+              description: 'Flagship Boiling Water Proof marine plywood engineered with premium tropical hardwood for custom modular kitchens, bathroom vanities, and yachts.',
+              ctaText1: 'Explore Club 710',
               ctaUrl1: '/products/elisa-club-710',
+              ctaText2: 'Request Quote',
+              ctaUrl2: '/contact',
+              desktopImage: 'https://images.unsplash.com/photo-1556911220-e15b29be8c8f?auto=format&fit=crop&w=1600&q=80',
+              mobileImage: 'https://images.unsplash.com/photo-1556911220-e15b29be8c8f?auto=format&fit=crop&w=800&q=80',
+            },
+            {
+              title: 'Elisa Green Plywood',
+              subtitle: 'Precision Calibrated BWR Sheets',
+              eyebrow: 'ELISA DECOR',
+              description: 'Eco-friendly, moisture-resistant plywood with E1 low emissions and zero core gaps. Built for premium walk-in wardrobes, paneling, and custom bedroom sets.',
+              ctaText1: 'Explore Elisa Green',
+              ctaUrl1: '/products/elisa-green',
+              ctaText2: 'Request Quote',
+              ctaUrl2: '/contact',
+              desktopImage: 'https://images.unsplash.com/photo-1618219908412-a29a1bb7b86e?auto=format&fit=crop&w=1600&q=80',
+              mobileImage: 'https://images.unsplash.com/photo-1618219908412-a29a1bb7b86e?auto=format&fit=crop&w=800&q=80',
+            },
+            {
+              title: 'Elisa Premium Boards',
+              subtitle: 'Exclusive Architectural Wood Surfaces',
+              eyebrow: 'ELISA DECOR',
+              description: 'High-density decor boards and custom calibrated panels designed to accommodate premium veneer overlays in hotel lobbies, offices, and bespoke joinery.',
+              ctaText1: 'Explore Elisa Premium',
+              ctaUrl1: '/products/elisa-premium',
               ctaText2: 'Request Quote',
               ctaUrl2: '/contact',
               desktopImage: 'https://images.unsplash.com/photo-1540518614846-7eded433c457?auto=format&fit=crop&w=1600&q=80',
@@ -233,7 +438,7 @@ async function seed() {
         content: {
           eyebrow: 'ABOUT ELISA DECOR',
           heading: 'Materials that become part of the spaces you imagine.',
-          description1: 'Founded on the principles of extreme durability, precision manufacturing, and ecological responsibility.',
+          description1: 'Founded on the principles of extreme durability, precision calibration, and ecological responsibility, Elisa Decor provides architects and interior contractors with wood sheets that never warp.',
           ctaText: 'Discover Elisa Decor',
           ctaUrl: '/about',
           imageLeft: 'https://images.unsplash.com/photo-1618219908412-a29a1bb7b86e?auto=format&fit=crop&w=800&q=80',
@@ -276,9 +481,10 @@ async function seed() {
     seo: {
       title: 'Elisa Decor | Premium Plywood, Marine Grade Boards & Custom Materials',
       description: 'Welcome to Elisa Decor. We engineer premium, warp-free, and termite-resistant BWP marine-grade plywood and commercial BWR sheets for architects and luxury interiors.',
+      ogImage: greenHero._id,
     },
   });
-  console.log('Homepage CMS sections configured.');
+  console.log('Homepage CMS sections configured with 3 matching product slides.');
 
   await FAQ.create({ question: 'What is the difference between BWR and BWP grade plywood?', answer: 'BWR = Boiling Water Resistant (wardrobes, furniture). BWP = Boiling Water Proof (kitchens, bathrooms).', published: true, sortOrder: 1 });
   await FAQ.create({ question: 'How can I verify if Elisa plywood is genuine?', answer: 'All Elisa Decor products come with a unique branding stamp and QR codes on the board face.', published: true, sortOrder: 2 });
