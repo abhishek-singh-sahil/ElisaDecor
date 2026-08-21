@@ -89,13 +89,13 @@ export default function EnquiryModal({ isOpen, onClose, products, initialProduct
   const activeProductData = products?.find((p) => p._id === productId);
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end md:items-center justify-center p-0 md:p-4">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       <div
         onClick={onClose}
         className="fixed inset-0 bg-primary-dark/80 backdrop-blur-sm transition-opacity"
       />
 
-      <div className="relative w-full md:max-w-4xl bg-bg-warm border-t md:border border-sand rounded-t-xl md:rounded-xl overflow-hidden shadow-2xl flex flex-col md:flex-row z-50 h-[92vh] md:h-auto md:max-h-[85vh] min-h-0">
+      <div className="relative w-full max-w-4xl bg-bg-warm border border-sand rounded-xl overflow-hidden shadow-2xl flex flex-col md:flex-row z-50 h-auto md:h-[580px] max-h-[90vh] min-h-0 animate-popup">
         <button
           onClick={onClose}
           className="absolute top-4 right-4 p-1.5 rounded-full bg-zinc-950/20 text-primary-dark hover:bg-zinc-950/40 hover:text-white transition-colors z-20"

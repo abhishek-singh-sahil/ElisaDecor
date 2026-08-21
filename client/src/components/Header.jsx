@@ -1,14 +1,12 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, X, ArrowRight, Mail } from 'lucide-react';
-import EnquiryModal from './EnquiryModal';
 
-export default function Header({ settings, products }) {
+export default function Header({ settings, products, openEnquiry }) {
   const location = useLocation();
   const pathname = location.pathname;
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [enquiryModalOpen, setEnquiryModalOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 50);
@@ -20,6 +18,18 @@ export default function Header({ settings, products }) {
   useEffect(() => {
     setMobileMenuOpen(false);
   }, [pathname]);
+
+  // Lock body scroll when mobile drawer is active
+  useEffect(() => {
+    if (mobileMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [mobileMenuOpen]);
 
   const navProducts = products?.filter((p) => p.status === 'PUBLISHED').slice(0, 3) || [];
   const isHome = pathname === '/';
@@ -84,7 +94,7 @@ export default function Header({ settings, products }) {
           <div className="hidden lg:block">
             <button
               id="header-enquire-btn"
-              onClick={() => setEnquiryModalOpen(true)}
+              onClick={() => openEnquiry()}
               className={`flex items-center gap-2 px-5 py-2.5 rounded text-xs font-bold uppercase tracking-wider transition-all duration-200 shadow-sm ${
                 isTransparent
                   ? 'bg-white text-primary-dark hover:bg-zinc-100 hover:shadow-md'
@@ -147,7 +157,7 @@ export default function Header({ settings, products }) {
             <button
               onClick={() => {
                 setMobileMenuOpen(false);
-                setEnquiryModalOpen(true);
+                openEnquiry();
               }}
               className="flex items-center justify-center gap-2 w-full bg-accent hover:bg-accent/90 text-white font-bold py-3 rounded text-sm uppercase tracking-wider transition-colors shadow-lg"
             >
@@ -161,13 +171,6 @@ export default function Header({ settings, products }) {
           </div>
         </div>
       )}
-
-      <EnquiryModal
-        isOpen={enquiryModalOpen}
-        onClose={() => setEnquiryModalOpen(false)}
-        products={products}
-        settings={settings}
-      />
     </>
   );
 }

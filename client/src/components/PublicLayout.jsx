@@ -3,12 +3,20 @@ import { Outlet } from 'react-router-dom';
 import { Loader2 } from 'lucide-react';
 import Header from './Header';
 import Footer from './Footer';
+import EnquiryModal from './EnquiryModal';
 import api from '../api/axios';
 
 export default function PublicLayout() {
   const [settings, setSettings] = useState(null);
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [enquiryModalOpen, setEnquiryModalOpen] = useState(false);
+  const [enquiryProductSlug, setEnquiryProductSlug] = useState('');
+
+  const openEnquiry = (slug = '') => {
+    setEnquiryProductSlug(slug);
+    setEnquiryModalOpen(true);
+  };
 
   useEffect(() => {
     const fetchLayoutData = async () => {
@@ -39,11 +47,19 @@ export default function PublicLayout() {
 
   return (
     <div className="min-h-screen bg-bg-warm flex flex-col">
-      <Header settings={settings} products={products} />
+      <Header settings={settings} products={products} openEnquiry={openEnquiry} />
       <main className="flex-grow">
-        <Outlet context={{ settings, products }} />
+        <Outlet context={{ settings, products, openEnquiry }} />
       </main>
       <Footer settings={settings} products={products} />
+
+      <EnquiryModal
+        isOpen={enquiryModalOpen}
+        onClose={() => setEnquiryModalOpen(false)}
+        products={products}
+        initialProductSlug={enquiryProductSlug}
+        settings={settings}
+      />
     </div>
   );
 }

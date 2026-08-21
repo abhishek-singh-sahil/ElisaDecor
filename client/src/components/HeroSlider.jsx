@@ -1,11 +1,9 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { ChevronLeft, ChevronRight, Mail } from 'lucide-react';
-import EnquiryModal from './EnquiryModal';
 
-export default function HeroSlider({ slides, settings, globalSettings, products }) {
+export default function HeroSlider({ slides, settings, globalSettings, products, openEnquiry }) {
   const [activeIdx, setActiveIdx] = useState(0);
-  const [enquiryModalOpen, setEnquiryModalOpen] = useState(false);
 
   const duration = settings?.transitionSpeed || 5000;
   const autoplay = settings?.autoplay !== false;
@@ -34,7 +32,7 @@ export default function HeroSlider({ slides, settings, globalSettings, products 
   const overlayOpacity = settings?.overlayOpacity || 0.45;
 
   return (
-    <section className="relative w-full h-[100dvh] bg-primary-dark overflow-hidden flex items-center">
+    <section className="relative w-full h-[100vh] bg-primary-dark overflow-hidden flex items-center">
       {/* Background slide images */}
       {slides.map((slide, idx) => (
         <div
@@ -46,8 +44,10 @@ export default function HeroSlider({ slides, settings, globalSettings, products 
           <img
             src={slide.desktopImage || slide.image}
             alt={slide.title}
-            className={`w-full h-full object-cover object-center transition-transform duration-[10000ms] ease-out ${
-              idx === activeIdx ? 'scale-108' : 'scale-100'
+            className={`w-full h-full object-cover object-center ${
+              slides.length > 1
+                ? `transition-transform duration-[10000ms] ease-out ${idx === activeIdx ? 'scale-108' : 'scale-100'}`
+                : 'scale-100'
             }`}
           />
           <div
@@ -114,7 +114,7 @@ export default function HeroSlider({ slides, settings, globalSettings, products 
               )}
 
               <button
-                onClick={() => setEnquiryModalOpen(true)}
+                onClick={() => openEnquiry()}
                 className="flex items-center gap-2 px-6 py-3 border border-white/40 hover:border-white hover:bg-white/10 text-white text-xs font-bold uppercase tracking-wider rounded transition-all shadow-sm"
               >
                 <Mail size={14} />
@@ -158,14 +158,6 @@ export default function HeroSlider({ slides, settings, globalSettings, products 
           </div>
         </>
       )}
-
-      {/* Enquiry Modal */}
-      <EnquiryModal
-        isOpen={enquiryModalOpen}
-        onClose={() => setEnquiryModalOpen(false)}
-        products={products}
-        settings={globalSettings}
-      />
     </section>
   );
 }

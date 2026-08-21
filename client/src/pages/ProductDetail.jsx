@@ -3,19 +3,16 @@ import { useParams, Link, useNavigate, useOutletContext } from 'react-router-dom
 import { Mail, ShieldCheck, ChevronRight, CheckCircle, Loader2 } from 'lucide-react';
 import api from '../api/axios';
 import ProductGallery from '../components/ProductGallery';
-import EnquiryModal from '../components/EnquiryModal';
 import SEO, { getProductSchema } from '../components/SEO';
 
 export default function ProductDetail() {
   const { slug } = useParams();
   const navigate = useNavigate();
-  const { settings } = useOutletContext();
+  const { settings, products: allProducts = [], openEnquiry } = useOutletContext();
 
   const [product, setProduct] = useState(null);
-  const [allProducts, setAllProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  const [enquiryModalOpen, setEnquiryModalOpen] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -25,10 +22,6 @@ export default function ProductDetail() {
         // Fetch specific product by slug
         const prodRes = await api.get(`/products/${slug}`);
         setProduct(prodRes.data.product);
-
-        // Fetch all published products for switcher indices
-        const allRes = await api.get('/products');
-        setAllProducts(allRes.data.products || []);
       } catch (err) {
         console.error('Failed to load product detail:', err);
         setError(err.response?.data?.error || 'Product not found');
@@ -144,7 +137,7 @@ export default function ProductDetail() {
 
           <div className="pt-2">
             <button
-              onClick={() => setEnquiryModalOpen(true)}
+              onClick={() => openEnquiry(product.slug)}
               className="flex items-center justify-center gap-2 bg-forest hover:bg-primary-dark text-bg-warm font-bold py-3.5 px-8 rounded-lg text-xs uppercase tracking-wider transition-colors shadow-md"
             >
               <Mail size={14} />
@@ -291,14 +284,6 @@ export default function ProductDetail() {
           <span className="text-zinc-300">Next →</span>
         )}
       </div>
-
-      <EnquiryModal
-        isOpen={enquiryModalOpen}
-        onClose={() => setEnquiryModalOpen(false)}
-        products={allProducts}
-        initialProductSlug={product.slug}
-        settings={settings}
-      />
       </>
       )}
     </div>

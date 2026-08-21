@@ -6,7 +6,7 @@ import HeroSlider from '../components/HeroSlider';
 import SEO, { getOrganizationSchema } from '../components/SEO';
 
 export default function Home() {
-  const { settings: globalSettings } = useOutletContext();
+  const { settings: globalSettings, openEnquiry } = useOutletContext();
   const [homepage, setHomepage] = useState(null);
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -82,6 +82,7 @@ export default function Home() {
                 settings={settings}
                 globalSettings={globalSettings}
                 products={products}
+                openEnquiry={openEnquiry}
               />
             );
 
