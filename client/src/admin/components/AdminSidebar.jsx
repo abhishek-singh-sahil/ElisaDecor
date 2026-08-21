@@ -24,6 +24,7 @@ export default function AdminSidebar({ adminName, adminEmail, onProfileClick }) 
     { name: 'Dashboard', href: '/admin', icon: LayoutDashboard },
     { name: 'Enquiries', href: '/admin/enquiries', icon: Mail },
     { name: 'Products', href: '/admin/products', icon: Box },
+    { name: 'Projects', href: '/admin/projects', icon: FolderKanban },
     { name: 'Media Library', href: '/admin/media', icon: ImageIcon },
     { name: 'Homepage Builder', href: '/admin/homepage', icon: HomeIcon },
     { name: 'Settings', href: '/admin/settings', icon: SettingsIcon },

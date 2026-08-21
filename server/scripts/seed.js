@@ -8,6 +8,7 @@ import Product from '../models/Product.js';
 import FAQ from '../models/FAQ.js';
 import Testimonial from '../models/Testimonial.js';
 import Media from '../models/Media.js';
+import Project from '../models/Project.js';
 
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/elisadecor';
 
@@ -42,6 +43,7 @@ async function seed() {
   await AdminUser.deleteMany({});
   await SiteSetting.deleteMany({});
   await Homepage.deleteMany({});
+  await Project.deleteMany({});
   await Product.deleteMany({});
   await FAQ.deleteMany({});
   await Testimonial.deleteMany({});
@@ -202,7 +204,6 @@ async function seed() {
     socialUrls: {
       facebook: 'https://facebook.com/elisadecor',
       instagram: 'https://instagram.com/elisadecor',
-      linkedin: 'https://linkedin.com/company/elisadecor',
       twitter: 'https://twitter.com/elisadecor',
       youtube: 'https://youtube.com/elisadecor',
     },
@@ -489,6 +490,51 @@ async function seed() {
   await Testimonial.create({ name: 'Anjali Sharma', designation: 'Principal Architect', company: 'Studio Line Design', testimonial: 'Elisa Club 710 has become our default specification. The calibration is perfect, and we have had zero warping complaints across multiple modular kitchen projects.', status: 'PUBLISHED', sortOrder: 1 });
   await Testimonial.create({ name: 'Rajesh Patel', designation: 'Interior Contractor', company: 'Patel Joinery Works', testimonial: 'Elisa Green BWR plywood has excellent screw-holding capacity. The density is uniform with zero gaps inside.', status: 'PUBLISHED', sortOrder: 2 });
   console.log('Testimonials & FAQs seeded.');
+
+  // Create Projects Gallery Seeds
+  console.log('Seeding dynamic Projects showcases...');
+  await Project.create({
+    title: 'Premium Calibrated Modular Kitchen',
+    slug: 'premium-calibrated-modular-kitchen',
+    description: 'Calibrated base frames assembled using Elisa Club 710 BWP marine plywood sheets. Features high resistance to kitchen sink humidity, direct water splash, and steam exposure.',
+    coverImage: clubHero._id,
+    gallery: [clubGal1._id, clubGal2._id],
+    category: 'KITCHEN',
+    location: 'Ranchi, Jharkhand',
+    productsUsed: [p2._id],
+    status: 'PUBLISHED',
+    sortOrder: 1,
+    seo: { title: 'Premium Modular Kitchen Case Study', description: 'Real-world modular kitchen assembled with Elisa Club 710 marine plywood.' }
+  });
+
+  await Project.create({
+    title: 'Bespoke Walk-in Wardrobe Closet',
+    slug: 'bespoke-walk-in-wardrobe-closet',
+    description: 'Wardrobe carcass and storage partitions constructed using E1 emission standard certified Elisa Green calibrated BWR boards, finished with warm decorative veneer claddings.',
+    coverImage: greenGal1._id,
+    gallery: [greenGal1._id, greenGal2._id],
+    category: 'WARDROBE',
+    location: 'Jamshedpur, Jharkhand',
+    productsUsed: [p1._id],
+    status: 'PUBLISHED',
+    sortOrder: 2,
+    seo: { title: 'Designer Walk-in Wardrobe Showcase', description: 'Designer bedroom wardrobes framing built with Elisa Green calibrated BWR plywood.' }
+  });
+
+  await Project.create({
+    title: 'Corporate Executive Boardroom',
+    slug: 'corporate-executive-boardroom',
+    description: 'Asymmetric feature walls and custom conference table backing surfaces supported by Elisa Premium boards for warp-free wood veneer alignment and structural stability.',
+    coverImage: premHero._id,
+    gallery: [premGal1._id, premGal2._id],
+    category: 'COMMERCIAL',
+    location: 'Patna, Bihar',
+    productsUsed: [p3._id],
+    status: 'PUBLISHED',
+    sortOrder: 3,
+    seo: { title: 'Commercial Office Boardroom Wall Cladding', description: 'Executive workspace wooden claddings assembled with Elisa Premium panels.' }
+  });
+  console.log('Projects Gallery showcases seeded.');
 
   await mongoose.disconnect();
   console.log('\n✅ Database seeding complete. Connection closed safely.\n');

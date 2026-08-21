@@ -26,6 +26,8 @@ import AdminEnquiries from './admin/pages/AdminEnquiries';
 import AdminProducts from './admin/pages/AdminProducts';
 import AdminProductNew from './admin/pages/AdminProductNew';
 import AdminProductEdit from './admin/pages/AdminProductEdit';
+import AdminProjects from './admin/pages/AdminProjects';
+import AdminProjectForm from './admin/pages/AdminProjectForm';
 import AdminMedia from './admin/pages/AdminMedia';
 import AdminHomepage from './admin/pages/AdminHomepage';
 import AdminSettings from './admin/pages/AdminSettings';
@@ -68,6 +70,9 @@ export default function App() {
           <Route path="products" element={<AdminProducts />} />
           <Route path="products/new" element={<AdminProductNew />} />
           <Route path="products/edit/:id" element={<AdminProductEdit />} />
+          <Route path="projects" element={<AdminProjects />} />
+          <Route path="projects/new" element={<AdminProjectForm />} />
+          <Route path="projects/edit/:id" element={<AdminProjectForm />} />
           <Route path="media" element={<AdminMedia />} />
           <Route path="homepage" element={<AdminHomepage />} />
           <Route path="settings" element={<AdminSettings />} />

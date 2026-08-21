@@ -25,7 +25,6 @@ export default function AdminSettings() {
   // Social Links
   const [facebook, setFacebook] = useState('');
   const [instagram, setInstagram] = useState('');
-  const [linkedin, setLinkedin] = useState('');
   const [twitter, setTwitter] = useState('');
   const [youtube, setYoutube] = useState('');
 
@@ -65,7 +64,6 @@ export default function AdminSettings() {
 
         setFacebook(s.socialUrls?.facebook || '');
         setInstagram(s.socialUrls?.instagram || '');
-        setLinkedin(s.socialUrls?.linkedin || '');
         setTwitter(s.socialUrls?.twitter || '');
         setYoutube(s.socialUrls?.youtube || '');
 
@@ -108,7 +106,6 @@ export default function AdminSettings() {
       socialUrls: {
         facebook,
         instagram,
-        linkedin,
         twitter,
         youtube,
       },
@@ -360,7 +357,6 @@ export default function AdminSettings() {
                 {[
                   { label: 'Facebook URL', val: facebook, setVal: setFacebook },
                   { label: 'Instagram URL', val: instagram, setVal: setInstagram },
-                  { label: 'LinkedIn URL', val: linkedin, setVal: setLinkedin },
                   { label: 'Twitter / X URL', val: twitter, setVal: setTwitter },
                   { label: 'YouTube URL', val: youtube, setVal: setYoutube },
                 ].map((item) => (

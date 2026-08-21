@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Facebook, Instagram, Linkedin, Twitter, Youtube, Mail, Phone, MapPin, Clock } from 'lucide-react';
+import { Facebook, Instagram, Youtube, Mail, Phone, MapPin, Clock } from 'lucide-react';
 
 export default function Footer({ settings, products }) {
   const publishedProducts = products?.filter((p) => p.status === 'PUBLISHED') || [];
@@ -31,27 +31,24 @@ export default function Footer({ settings, products }) {
           {/* Social Icons */}
           <div className="flex gap-4">
             {settings?.socialUrls?.facebook && (
-              <a href={settings.socialUrls.facebook} target="_blank" rel="noreferrer" className="text-zinc-500 hover:text-white transition-colors">
+              <a href={settings.socialUrls.facebook} target="_blank" rel="noreferrer" className="text-zinc-500 hover:text-white transition-colors" title="Facebook">
                 <Facebook size={18} />
               </a>
             )}
             {settings?.socialUrls?.instagram && (
-              <a href={settings.socialUrls.instagram} target="_blank" rel="noreferrer" className="text-zinc-500 hover:text-white transition-colors">
+              <a href={settings.socialUrls.instagram} target="_blank" rel="noreferrer" className="text-zinc-500 hover:text-white transition-colors" title="Instagram">
                 <Instagram size={18} />
               </a>
             )}
-            {settings?.socialUrls?.linkedin && (
-              <a href={settings.socialUrls.linkedin} target="_blank" rel="noreferrer" className="text-zinc-500 hover:text-white transition-colors">
-                <Linkedin size={18} />
-              </a>
-            )}
             {settings?.socialUrls?.twitter && (
-              <a href={settings.socialUrls.twitter} target="_blank" rel="noreferrer" className="text-zinc-500 hover:text-white transition-colors">
-                <Twitter size={18} />
+              <a href={settings.socialUrls.twitter} target="_blank" rel="noreferrer" className="text-zinc-500 hover:text-white transition-colors flex items-center justify-center" title="X (Twitter)">
+                <svg className="h-4.5 w-4.5 fill-current" viewBox="0 0 24 24">
+                  <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                </svg>
               </a>
             )}
             {settings?.socialUrls?.youtube && (
-              <a href={settings.socialUrls.youtube} target="_blank" rel="noreferrer" className="text-zinc-500 hover:text-white transition-colors">
+              <a href={settings.socialUrls.youtube} target="_blank" rel="noreferrer" className="text-zinc-500 hover:text-white transition-colors" title="YouTube">
                 <Youtube size={18} />
               </a>
             )}
