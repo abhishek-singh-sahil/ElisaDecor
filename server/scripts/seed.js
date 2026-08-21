@@ -46,7 +46,7 @@ async function seed() {
   await FAQ.deleteMany({});
   await Testimonial.deleteMany({});
   
-  // Note: We clean up media but we must preserve the custom logo/favicon media records if they exist!
+  // Clean up all media except the manually uploaded site logo and favicon
   const preserveIds = [];
   if (preservedLogoId) preserveIds.push(preservedLogoId);
   if (preservedFaviconId) preserveIds.push(preservedFaviconId);
@@ -64,132 +64,132 @@ async function seed() {
   });
   console.log(`Default Super Admin created: ${admin.email} (password: admin123)`);
 
-  // 2. Seed High-Quality Plywood Manufacturing & Sheet Material Media Assets
-  console.log('Seeding realistic plywood manufacturing Media assets...');
+  // 2. Seed Verified, Stable, Premium Wood & Timber Plywood Media Assets
+  console.log('Seeding verified plywood and wood texture assets...');
 
   // Elisa Green (Calibrated BWR Plywood) Images
   const greenHero = await createMediaRecord(
-    'https://images.unsplash.com/photo-1532372320978-9b4d7a92b24d?auto=format&fit=crop&w=1200&q=80',
+    'https://images.unsplash.com/photo-1533090161767-e6ffed986c88?auto=format&fit=crop&w=1200&q=80',
     'elisa-green-hero.jpg',
-    'Elisa Green Calibrated BWR Plywood sheets in wood workshop',
-    'High density stacks of moisture resistant plywood boards in a carpenter workspace.'
+    'Elisa Green calibrated wood planks surface',
+    'Calibrated wood grain sheets demonstrating smooth plywood surfaces.'
   );
   const greenMobileHero = await createMediaRecord(
-    'https://images.unsplash.com/photo-1532372320978-9b4d7a92b24d?auto=format&fit=crop&w=800&q=80',
+    'https://images.unsplash.com/photo-1533090161767-e6ffed986c88?auto=format&fit=crop&w=800&q=80',
     'elisa-green-mobile-hero.jpg',
-    'Elisa Green Mobile Plywood sheets'
+    'Elisa Green mobile calibrated wood surface'
   );
   const greenGal1 = await createMediaRecord(
-    'https://images.unsplash.com/photo-1589939705384-5185137a7f0f?auto=format&fit=crop&w=800&q=80',
-    'elisa-green-veneer.jpg',
-    'Stacked hardwood veneer sheets',
-    'Layers of premium calibrated hardwood veneer sheets ready for pressing.'
+    'https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=800&q=80',
+    'elisa-green-texture.jpg',
+    'Finished wood grain texture',
+    'Close-up of premium calibrated wood board face.'
   );
   const greenGal2 = await createMediaRecord(
-    'https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?auto=format&fit=crop&w=800&q=80',
-    'elisa-green-workshop.jpg',
-    'Calibrated board quality check in workshop',
-    'Precision wood sanding and thickness calibration check in woodworking warehouse.'
+    'https://images.unsplash.com/photo-1541123437800-1bb1317badc2?auto=format&fit=crop&w=800&q=80',
+    'elisa-green-logs.jpg',
+    'Raw plantation timber wood logs stack',
+    'Sustainable plantation wood logs stack ready for veneer peeling.'
   );
   const greenApp1 = await createMediaRecord(
     'https://images.unsplash.com/photo-1558882224-cca166733360?auto=format&fit=crop&w=600&q=80',
     'elisa-green-wardrobes.jpg',
-    'Modular Bedroom Wardrobe framing'
+    'Premium modular wardrobe framing'
   );
   const greenApp2 = await createMediaRecord(
-    'https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1538688525198-9b88f6f53126?auto=format&fit=crop&w=600&q=80',
     'elisa-green-panels.jpg',
-    'Warp-Free Plywood Partition accents'
+    'Warp-free wood panel partitions'
   );
   const greenApp3 = await createMediaRecord(
     'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=600&q=80',
     'elisa-green-furniture.jpg',
-    'High strength living room furniture carcass'
+    'Durable residential cabinet structures'
   );
 
   // Elisa Club 710 (BWP Marine Plywood) Images
   const clubHero = await createMediaRecord(
-    'https://images.unsplash.com/photo-1508873535684-277a3cbcc4e8?auto=format&fit=crop&w=1200&q=80',
+    'https://images.unsplash.com/photo-1618219908412-a29a1bb7b86e?auto=format&fit=crop&w=1200&q=80',
     'elisa-club-hero.jpg',
-    'Elisa Club 710 premium hardwood marine plywood stack',
-    'Deep layered tropical hardwood cores bonded under high pressure for BWP marine protection.'
+    'Elisa Club 710 vertical wood panel cladding',
+    'Premium vertical wood veneer sheets bonded under high temperature BWP marine specifications.'
   );
   const clubMobileHero = await createMediaRecord(
-    'https://images.unsplash.com/photo-1508873535684-277a3cbcc4e8?auto=format&fit=crop&w=800&q=80',
+    'https://images.unsplash.com/photo-1618219908412-a29a1bb7b86e?auto=format&fit=crop&w=800&q=80',
     'elisa-club-mobile-hero.jpg',
-    'Elisa Club 710 Mobile Marine Plywood banner'
+    'Elisa Club 710 mobile wood paneling'
   );
   const clubGal1 = await createMediaRecord(
     'https://images.unsplash.com/photo-1533090161767-e6ffed986c88?auto=format&fit=crop&w=800&q=80',
     'elisa-club-boards.jpg',
-    'Raw water-resistant timber stacks',
-    'Stacked hardwood logs and processed core strips showing waterproof resin layers.'
+    'Processed calibrated wood stacks',
+    'High density tropical hardwood calibrated core layers.'
   );
   const clubGal2 = await createMediaRecord(
     'https://images.unsplash.com/photo-1541123437800-1bb1317badc2?auto=format&fit=crop&w=800&q=80',
-    'elisa-club-logs.jpg',
-    'Forest log sourcing and veneer slicing',
-    'Hardwood log selection indicating marine grade thickness layers.'
+    'elisa-club-timber.jpg',
+    'Raw tropical hardwood timber stack',
+    'Tropical hardwood core logs selected for BWP boiling water testing.'
   );
   const clubApp1 = await createMediaRecord(
     'https://images.unsplash.com/photo-1556911220-e15b29be8c8f?auto=format&fit=crop&w=600&q=80',
     'elisa-club-kitchen.jpg',
-    'BWP Modular Kitchen base cabinets'
+    '100% Waterproof modular kitchen cabinetry'
   );
   const clubApp2 = await createMediaRecord(
     'https://images.unsplash.com/photo-1620626011761-996317b69766?auto=format&fit=crop&w=600&q=80',
     'elisa-club-bathrooms.jpg',
-    'Waterproof Bathroom Vanity backing'
+    'Moisture-proof bathroom vanity framing'
   );
   const clubApp3 = await createMediaRecord(
     'https://images.unsplash.com/photo-1567899378494-47b22a2ae96a?auto=format&fit=crop&w=600&q=80',
     'elisa-club-marine.jpg',
-    'Luxury Yacht internal wood cabins'
+    'Yacht cabins and marine grade wood joinery'
   );
 
   // Elisa Premium (Exotic Surface Boards) Images
   const premHero = await createMediaRecord(
-    'https://images.unsplash.com/photo-1520116468816-95b69f847357?auto=format&fit=crop&w=1200&q=80',
+    'https://images.unsplash.com/photo-1540518614846-7eded433c457?auto=format&fit=crop&w=1200&q=80',
     'elisa-premium-hero.jpg',
-    'Exotic pre-laminated designer veneer boards',
-    'Sleek wood veneer finish panels with beautiful vertical grains for modern surface cladding.'
+    'Luxurious lobby wood veneer panel walls',
+    'Designer architectural wood surfaces showcasing high-end pre-laminated boards.'
   );
   const premMobileHero = await createMediaRecord(
-    'https://images.unsplash.com/photo-1520116468816-95b69f847357?auto=format&fit=crop&w=800&q=80',
+    'https://images.unsplash.com/photo-1540518614846-7eded433c457?auto=format&fit=crop&w=800&q=80',
     'elisa-premium-mobile-hero.jpg',
-    'Elisa Premium Mobile wood grains'
+    'Elisa Premium mobile wood paneling'
   );
   const premGal1 = await createMediaRecord(
     'https://images.unsplash.com/photo-1538688525198-9b88f6f53126?auto=format&fit=crop&w=800&q=80',
-    'elisa-premium-grains.jpg',
-    'Polished pre-laminated veneer grains',
-    'Vibrant high density board surfaces showing architectural wood grains.'
+    'elisa-premium-grain.jpg',
+    'Architectural horizontal wood slats',
+    'Smooth, pre-laminated decorative board surfaces.'
   );
   const premGal2 = await createMediaRecord(
     'https://images.unsplash.com/photo-1618219908412-a29a1bb7b86e?auto=format&fit=crop&w=800&q=80',
     'elisa-premium-panels.jpg',
-    'Luxury veneer wood panel alignments',
-    'Finished wood veneers applied to calibrated backing boards in luxury residences.'
+    'Exotic veneer vertical panel alignments',
+    'Premium raw wood veneers applied over calibrated plywood sheets.'
   );
   const premApp1 = await createMediaRecord(
     'https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=600&q=80',
-    'elisa-premium-lobbies.jpg',
-    'Decorative cladding for corporate boardrooms'
+    'elisa-premium-office.jpg',
+    'Executive office wood wall panelings'
   );
   const premApp2 = await createMediaRecord(
     'https://images.unsplash.com/photo-1540518614846-7eded433c457?auto=format&fit=crop&w=600&q=80',
-    'elisa-premium-cladding.jpg',
-    'Hotel lobby wall wood paneling'
+    'elisa-premium-lobby.jpg',
+    'Premium lobby veneer cladding panels'
   );
   const premApp3 = await createMediaRecord(
     'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=600&q=80',
     'elisa-premium-residential.jpg',
-    'High-End custom cabinet panels'
+    'Luxury joinery backing panels'
   );
 
   console.log('All Media assets saved.');
 
-  // 3. Create Site Settings (Preserve logo/favicon)
+  // 3. Create Site Settings (Preserving logo/favicon)
   await SiteSetting.create({
     brandName: 'Elisa Decor',
     tagline: 'Crafting Premium Spaces with Sophisticated Materials',
@@ -379,7 +379,7 @@ async function seed() {
 
   console.log(`Seeded 3 products with complete Media assets: ${p1.name}, ${p2.name}, ${p3.name}`);
 
-  // 5. Homepage CMS sections with 3 Slides matching the 3 Products (Wood stack / plywood sheets focus)
+  // 5. Homepage CMS sections with 3 Slides matching the 3 Products (Clean wood stacks)
   await Homepage.create({
     sections: [
       {
@@ -397,8 +397,8 @@ async function seed() {
               ctaUrl1: '/products/elisa-club-710',
               ctaText2: 'Request Quote',
               ctaUrl2: '/contact',
-              desktopImage: 'https://images.unsplash.com/photo-1508873535684-277a3cbcc4e8?auto=format&fit=crop&w=1600&q=80',
-              mobileImage: 'https://images.unsplash.com/photo-1508873535684-277a3cbcc4e8?auto=format&fit=crop&w=800&q=80',
+              desktopImage: 'https://images.unsplash.com/photo-1618219908412-a29a1bb7b86e?auto=format&fit=crop&w=1600&q=80',
+              mobileImage: 'https://images.unsplash.com/photo-1618219908412-a29a1bb7b86e?auto=format&fit=crop&w=800&q=80',
             },
             {
               title: 'Elisa Green Plywood',
@@ -409,8 +409,8 @@ async function seed() {
               ctaUrl1: '/products/elisa-green',
               ctaText2: 'Request Quote',
               ctaUrl2: '/contact',
-              desktopImage: 'https://images.unsplash.com/photo-1532372320978-9b4d7a92b24d?auto=format&fit=crop&w=1600&q=80',
-              mobileImage: 'https://images.unsplash.com/photo-1532372320978-9b4d7a92b24d?auto=format&fit=crop&w=800&q=80',
+              desktopImage: 'https://images.unsplash.com/photo-1533090161767-e6ffed986c88?auto=format&fit=crop&w=1600&q=80',
+              mobileImage: 'https://images.unsplash.com/photo-1533090161767-e6ffed986c88?auto=format&fit=crop&w=800&q=80',
             },
             {
               title: 'Elisa Premium Boards',
@@ -421,8 +421,8 @@ async function seed() {
               ctaUrl1: '/products/elisa-premium',
               ctaText2: 'Request Quote',
               ctaUrl2: '/contact',
-              desktopImage: 'https://images.unsplash.com/photo-1520116468816-95b69f847357?auto=format&fit=crop&w=1600&q=80',
-              mobileImage: 'https://images.unsplash.com/photo-1520116468816-95b69f847357?auto=format&fit=crop&w=800&q=80',
+              desktopImage: 'https://images.unsplash.com/photo-1540518614846-7eded433c457?auto=format&fit=crop&w=1600&q=80',
+              mobileImage: 'https://images.unsplash.com/photo-1540518614846-7eded433c457?auto=format&fit=crop&w=800&q=80',
             },
           ],
         },

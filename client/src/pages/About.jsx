@@ -41,7 +41,7 @@ export default function About() {
 
       {/* 1. Header Banner */}
       <section className="bg-primary-dark text-white py-20 px-6 md:px-8 relative overflow-hidden flex items-center justify-center text-center">
-        <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1540518614846-7eded433c457?auto=format&fit=crop&w=1600&q=80')] bg-cover opacity-15 mix-blend-overlay" />
+        <div className="absolute inset-0 bg-gradient-to-br from-forest/15 to-primary-dark/40 opacity-20" />
         <div className="relative z-10 max-w-3xl space-y-4">
           <span className="text-xs font-bold tracking-widest text-brass uppercase block">CRAFT & CALIBRATION</span>
           <h1 className="text-4xl md:text-6xl font-bold font-serif leading-tight">
@@ -75,7 +75,7 @@ export default function About() {
 
         <div className="aspect-[4/3] rounded-lg overflow-hidden border border-sand bg-zinc-200 shadow-md">
           <img
-            src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=800&q=80"
+            src="https://images.unsplash.com/photo-1541123437800-1bb1317badc2?auto=format&fit=crop&w=800&q=80"
             alt="Elisa Decor calibration core veneers"
             className="w-full h-full object-cover"
           />

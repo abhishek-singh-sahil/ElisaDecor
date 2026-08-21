@@ -7,11 +7,13 @@ import About from './pages/About';
 import Process from './pages/Process';
 import Projects from './pages/Projects';
 import Contact from './pages/Contact';
+import Products from './pages/Products';
 import ProductDetail from './pages/ProductDetail';
 import PrivacyPolicy from './pages/PrivacyPolicy';
 import Terms from './pages/Terms';
 import CookiePolicy from './pages/CookiePolicy';
 import NotFound from './pages/NotFound';
+import ScrollToTop from './components/ScrollToTop';
 
 // Admin Auth & Layout
 import ProtectedRoute from './admin/components/ProtectedRoute';
@@ -31,6 +33,7 @@ import AdminSettings from './admin/pages/AdminSettings';
 export default function App() {
   return (
     <BrowserRouter>
+      <ScrollToTop />
       <Routes>
         {/* Public Website Routes */}
         <Route element={<PublicLayout />}>
@@ -39,6 +42,8 @@ export default function App() {
           <Route path="/process" element={<Process />} />
           <Route path="/projects" element={<Projects />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/products" element={<Products />} />
+          <Route path="/product" element={<Navigate to="/products" replace />} />
           <Route path="/products/:slug" element={<ProductDetail />} />
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
           <Route path="/terms" element={<Terms />} />

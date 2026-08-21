@@ -104,7 +104,7 @@ export default function EnquiryModal({ isOpen, onClose, products, initialProduct
         </button>
 
         <div className="hidden md:flex md:w-5/12 bg-primary-dark text-bg-warm flex-col justify-between p-8 relative overflow-hidden flex-shrink-0">
-          <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1540518614846-7eded433c457?auto=format&fit=crop&w=800&q=80')] bg-cover opacity-15 mix-blend-overlay" />
+          <div className="absolute inset-0 bg-gradient-to-br from-forest/10 to-primary-dark/30 opacity-20" />
           
           <div className="relative space-y-4">
             <span className="text-xs font-bold uppercase tracking-widest text-brass">ELISA DECOR</span>

@@ -41,7 +41,7 @@ export default function Process() {
 
       {/* 1. Header Banner */}
       <section className="bg-primary-dark text-white py-20 px-6 md:px-8 relative overflow-hidden flex items-center justify-center text-center">
-        <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?auto=format&fit=crop&w=1600&q=80')] bg-cover opacity-15 mix-blend-overlay" />
+        <div className="absolute inset-0 bg-gradient-to-br from-forest/15 to-primary-dark/40 opacity-20" />
         <div className="relative z-10 max-w-3xl space-y-4">
           <span className="text-xs font-bold tracking-widest text-brass uppercase block">VERIFIED METRIC</span>
           <h1 className="text-4xl md:text-6xl font-bold font-serif leading-tight">
