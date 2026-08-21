@@ -25,6 +25,26 @@ export default function AdminLayout() {
     fetchMe();
   }, []);
 
+  useEffect(() => {
+    const fetchSettingsFavicon = async () => {
+      try {
+        const res = await api.get('/settings');
+        if (res.data?.settings?.favicon?.url) {
+          let link = document.querySelector("link[rel~='icon']");
+          if (!link) {
+            link = document.createElement('link');
+            link.rel = 'icon';
+            document.getElementsByTagName('head')[0].appendChild(link);
+          }
+          link.href = res.data.settings.favicon.url;
+        }
+      } catch (err) {
+        console.error('Failed to load settings for favicon:', err);
+      }
+    };
+    fetchSettingsFavicon();
+  }, []);
+
   const handleProfileUpdate = (updatedUser) => {
     setAdmin({
       name: updatedUser.name,

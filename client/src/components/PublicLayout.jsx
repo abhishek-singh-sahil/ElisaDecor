@@ -36,6 +36,18 @@ export default function PublicLayout() {
     fetchLayoutData();
   }, []);
 
+  useEffect(() => {
+    if (settings?.favicon?.url) {
+      let link = document.querySelector("link[rel~='icon']");
+      if (!link) {
+        link = document.createElement('link');
+        link.rel = 'icon';
+        document.getElementsByTagName('head')[0].appendChild(link);
+      }
+      link.href = settings.favicon.url;
+    }
+  }, [settings]);
+
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-bg-warm text-zinc-650">
