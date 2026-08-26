@@ -101,8 +101,8 @@ export default function AdminSettings() {
       whatsApp,
       businessHours,
       googleMapsUrl,
-      logo: logo?._id || null,
-      favicon: favicon?._id || null,
+      logo: logo && typeof logo === 'object' ? logo._id : (logo || null),
+      favicon: favicon && typeof favicon === 'object' ? favicon._id : (favicon || null),
       socialUrls: {
         facebook,
         instagram,

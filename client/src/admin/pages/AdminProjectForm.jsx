@@ -151,8 +151,8 @@ export default function AdminProjectForm() {
     // Prepare payload
     const payload = {
       ...form,
-      coverImage: form.coverImage?._id || null,
-      gallery: form.gallery.map((m) => m._id),
+      coverImage: form.coverImage && typeof form.coverImage === 'object' ? form.coverImage._id : (form.coverImage || null),
+      gallery: form.gallery.map((m) => m && typeof m === 'object' ? m._id : m),
     };
 
     try {

@@ -1,6 +1,11 @@
 import { v2 as cloudinary } from 'cloudinary';
 import fs from 'fs';
 import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const uploadDir = path.resolve(__dirname, '..', 'uploads');
 
 const isCloudinaryConfigured =
   process.env.CLOUDINARY_CLOUD_NAME &&
@@ -44,7 +49,6 @@ export async function uploadMedia(fileBuffer, filename, mimeType, folder = 'elis
       uploadStream.end(fileBuffer);
     });
   } else {
-    const uploadDir = path.join(process.cwd(), 'uploads');
     if (!fs.existsSync(uploadDir)) {
       fs.mkdirSync(uploadDir, { recursive: true });
     }
@@ -70,7 +74,7 @@ export async function uploadMedia(fileBuffer, filename, mimeType, folder = 'elis
 export async function deleteMedia(publicId) {
   if (publicId.startsWith('local-')) {
     const localName = publicId.replace('local-', '');
-    const filePath = path.join(process.cwd(), 'uploads', localName);
+    const filePath = path.join(uploadDir, localName);
     if (fs.existsSync(filePath)) {
       fs.unlinkSync(filePath);
     }
