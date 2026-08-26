@@ -1,12 +1,14 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Mail, Box, Image as ImageIcon, PlusCircle, ExternalLink, Calendar, UserCheck, Loader2 } from 'lucide-react';
+import { BarChart, Bar, LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts';
 import api from '../../api/axios';
 import SEO from '../../components/SEO';
 
 export default function AdminDashboard() {
   const [metrics, setMetrics] = useState(null);
   const [recentEnquiries, setRecentEnquiries] = useState([]);
+  const [charts, setCharts] = useState({ enquiriesByProduct: [], enquiriesOverTime: [] });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
@@ -16,6 +18,7 @@ export default function AdminDashboard() {
         const res = await api.get('/auth/dashboard');
         setMetrics(res.data.metrics);
         setRecentEnquiries(res.data.recentEnquiries || []);
+        setCharts(res.data.charts || { enquiriesByProduct: [], enquiriesOverTime: [] });
       } catch (err) {
         console.error('Failed to fetch dashboard metrics:', err);
         setError('Failed to load dashboard summaries.');
@@ -77,6 +80,55 @@ export default function AdminDashboard() {
             </div>
           );
         })}
+      </div>
+
+      {/* Charts Grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Chart 1: Enquiries by Product */}
+        <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-6 space-y-4">
+          <div>
+            <h3 className="text-lg font-bold text-white font-serif">Enquiries by Product</h3>
+            <p className="text-xs text-zinc-400">Distribution of customer enquiries across product lines.</p>
+          </div>
+          <div className="h-72 w-full text-xs">
+            {!charts.enquiriesByProduct || charts.enquiriesByProduct.length === 0 ? (
+              <div className="h-full flex items-center justify-center text-zinc-500">No enquiry data yet.</div>
+            ) : (
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={charts.enquiriesByProduct} margin={{ top: 10, right: 10, left: -25, bottom: 0 }}>
+                  <CartesianGrid stroke="#27272a" strokeDasharray="3 3" />
+                  <XAxis dataKey="name" stroke="#a1a1aa" />
+                  <YAxis stroke="#a1a1aa" allowDecimals={false} />
+                  <Tooltip contentStyle={{ backgroundColor: '#18181b', borderColor: '#27272a', color: '#fff' }} />
+                  <Bar dataKey="count" fill="#10b981" radius={[4, 4, 0, 0]} />
+                </BarChart>
+              </ResponsiveContainer>
+            )}
+          </div>
+        </div>
+
+        {/* Chart 2: Enquiries Over Time */}
+        <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-6 space-y-4">
+          <div>
+            <h3 className="text-lg font-bold text-white font-serif">Enquiries Over Time</h3>
+            <p className="text-xs text-zinc-400">Visual trend of lead registration over the last 30 days.</p>
+          </div>
+          <div className="h-72 w-full text-xs">
+            {!charts.enquiriesOverTime || charts.enquiriesOverTime.length === 0 ? (
+              <div className="h-full flex items-center justify-center text-zinc-500">No recent trends to display.</div>
+            ) : (
+              <ResponsiveContainer width="100%" height="100%">
+                <LineChart data={charts.enquiriesOverTime} margin={{ top: 10, right: 10, left: -25, bottom: 0 }}>
+                  <CartesianGrid stroke="#27272a" strokeDasharray="3 3" />
+                  <XAxis dataKey="date" stroke="#a1a1aa" tickFormatter={(tick) => tick.slice(5)} />
+                  <YAxis stroke="#a1a1aa" allowDecimals={false} />
+                  <Tooltip contentStyle={{ backgroundColor: '#18181b', borderColor: '#27272a', color: '#fff' }} />
+                  <Line type="monotone" dataKey="count" stroke="#b79a63" strokeWidth={2} activeDot={{ r: 6 }} />
+                </LineChart>
+              </ResponsiveContainer>
+            )}
+          </div>
+        </div>
       </div>
 
       {/* Action panel & Recent Enquiries */}

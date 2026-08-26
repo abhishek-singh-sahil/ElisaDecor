@@ -6,6 +6,7 @@ export const getPublicProducts = async (req, res) => {
   try {
     const products = await Product.find({ status: 'PUBLISHED' })
       .sort({ sortOrder: 1, createdAt: -1 })
+      .populate('logo')
       .populate('heroImage')
       .populate('mobileHeroImage')
       .populate('gallery')
@@ -23,6 +24,7 @@ export const getPublicProductBySlug = async (req, res) => {
   try {
     const { slug } = req.params;
     const product = await Product.findOne({ slug: slug.toLowerCase(), status: 'PUBLISHED' })
+      .populate('logo')
       .populate('heroImage')
       .populate('mobileHeroImage')
       .populate('gallery')
@@ -46,6 +48,7 @@ export const getAdminProducts = async (req, res) => {
   try {
     const products = await Product.find({})
       .sort({ sortOrder: 1, createdAt: -1 })
+      .populate('logo')
       .populate('heroImage')
       .lean();
 
@@ -60,6 +63,7 @@ export const getAdminProducts = async (req, res) => {
 export const getAdminProductById = async (req, res) => {
   try {
     const product = await Product.findById(req.params.id)
+      .populate('logo')
       .populate('heroImage')
       .populate('mobileHeroImage')
       .populate('gallery')

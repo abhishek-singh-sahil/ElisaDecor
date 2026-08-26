@@ -3,7 +3,7 @@ import { Link, useOutletContext } from 'react-router-dom';
 import { ChevronRight, ArrowRight, ShieldCheck, ArrowUpRight, Loader2 } from 'lucide-react';
 import api from '../api/axios';
 import HeroSlider from '../components/HeroSlider';
-import SEO, { getOrganizationSchema } from '../components/SEO';
+import SEO, { getOrganizationSchema, getLocalBusinessSchema, getWebsiteSchema } from '../components/SEO';
 
 export default function Home() {
   const { settings: globalSettings, openEnquiry } = useOutletContext();
@@ -66,7 +66,11 @@ export default function Home() {
         ogTitle={homepage.seo?.ogTitle}
         ogDescription={homepage.seo?.ogDescription}
         ogImage={homepage.seo?.ogImage?.url}
-        schema={getOrganizationSchema(homepage)}
+        schemas={[
+          getOrganizationSchema(globalSettings),
+          getLocalBusinessSchema(globalSettings),
+          getWebsiteSchema(),
+        ]}
       />
 
       {activeSections.map((section, idx) => {
@@ -161,55 +165,131 @@ export default function Home() {
                   </div>
 
                   <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                    {products.map((product, pIdx) => (
-                      <div
+                    {[...products].sort((a, b) => (a.sortOrder || 0) - (b.sortOrder || 0)).map((product, pIdx) => (
+                      <Link
                         key={product._id}
+                        to={`/products/${product.slug}`}
                         className="group flex flex-col justify-between bg-bg-warm border border-sand/60 hover:border-accent/40 rounded overflow-hidden hover:shadow-xl transition-all duration-300 relative"
                       >
-                        <div className="aspect-[4/3] w-full overflow-hidden bg-zinc-100 relative">
-                          {product.heroImage ? (
-                            <img
-                              src={product.heroImage.url}
-                              alt={product.name}
-                              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                              loading="lazy"
-                            />
-                          ) : (
-                            <div className="w-full h-full flex items-center justify-center text-zinc-400">
-                              No image uploaded.
-                            </div>
-                          )}
-                          <span className="absolute top-4 left-4 text-xs font-bold font-mono tracking-widest bg-primary-dark/85 text-brass px-3 py-1 rounded-full uppercase">
-                            0{pIdx + 1}
-                          </span>
-                        </div>
-
-                        <div className="p-6 md:p-8 space-y-4 flex-1 flex flex-col justify-between">
-                          <div className="space-y-2">
-                            {product.productCode && settings.showProductCode && (
-                              <span className="text-[10px] font-bold font-mono tracking-widest text-zinc-500 uppercase block">
-                                CODE: {product.productCode}
-                              </span>
+                        <div>
+                          <div className="aspect-[4/3] w-full overflow-hidden bg-zinc-100 relative">
+                            {product.heroImage ? (
+                              <img
+                                src={product.heroImage.url}
+                                alt={product.name}
+                                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                                loading="lazy"
+                              />
+                            ) : (
+                              <div className="w-full h-full flex items-center justify-center text-zinc-400">
+                                No image uploaded.
+                              </div>
                             )}
-                            <h3 className="text-2xl font-bold font-serif text-primary-dark group-hover:text-accent transition-colors">
-                              {product.name}
-                            </h3>
-                            <p className="text-sm text-zinc-650 leading-relaxed line-clamp-3">
+                            <span className="absolute top-4 left-4 text-xs font-bold font-mono tracking-widest bg-primary-dark/85 text-brass px-3 py-1 rounded-full uppercase">
+                              0{pIdx + 1}
+                            </span>
+                          </div>
+
+                          <div className="p-6 md:p-8 space-y-4">
+                            <div className="flex justify-between items-start gap-4">
+                              <h3 className="text-3xl font-bold font-serif text-primary-dark group-hover:text-accent transition-colors leading-tight">
+                                {product.name}
+                              </h3>
+                              {product.warranty && (
+                                <span className="text-[10px] font-bold font-mono tracking-wider bg-forest text-white px-2.5 py-1 rounded-full uppercase shrink-0">
+                                  {product.warranty.replace(' Warranty', '')} WTY
+                                </span>
+                              )}
+                            </div>
+
+                            <p className="text-sm text-zinc-600 leading-relaxed line-clamp-2">
                               {product.shortDescription}
                             </p>
                           </div>
-
-                          <div className="pt-4 border-t border-sand/40 flex justify-between items-center">
-                            <Link
-                              to={`/products/${product.slug}`}
-                              className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-primary-dark hover:text-accent transition-colors"
-                            >
-                              Explore Product <ArrowUpRight size={14} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-                            </Link>
-                          </div>
                         </div>
-                      </div>
+
+                        <div className="px-6 md:px-8 pb-6 md:pb-8 pt-4 border-t border-sand/40">
+                          <button
+                            onClick={(e) => {
+                              e.preventDefault();
+                              e.stopPropagation();
+                              openEnquiry(product.slug);
+                            }}
+                            className="w-full py-3.5 bg-forest hover:bg-primary-dark text-white rounded text-xs font-bold uppercase tracking-wider transition-colors cursor-pointer text-center"
+                          >
+                            Enquire Now
+                          </button>
+                        </div>
+                      </Link>
                     ))}
+                  </div>
+
+                  {/* Side-by-Side Product Comparison Table */}
+                  <div className="pt-16 border-t border-sand/45 space-y-8">
+                    <div className="text-center max-w-xl mx-auto space-y-2">
+                      <span className="text-[10px] font-bold tracking-widest text-accent uppercase block">TECHNICAL MATCH-UP</span>
+                      <h3 className="text-2xl font-bold font-serif text-primary-dark">Visual Brand Comparison</h3>
+                      <p className="text-xs text-zinc-500">Compare our engineered plywood specifications side-by-side to select the ideal material for your space.</p>
+                    </div>
+
+                    <div className="border border-sand/60 rounded-xl overflow-hidden shadow-sm bg-bg-warm">
+                      <div className="overflow-x-auto">
+                        <table className="w-full text-left text-xs border-collapse min-w-[700px]">
+                          <thead>
+                            <tr className="bg-sand/30 border-b border-sand/50 text-[10px] font-bold text-primary-dark uppercase tracking-wider">
+                              <th className="px-6 py-4 w-1/4">Specification</th>
+                              <th className="px-6 py-4 w-1/4">Elisa Green</th>
+                              <th className="px-6 py-4 w-1/4">Elisa Club 710</th>
+                              <th className="px-6 py-4 w-1/4">Decor Club Prime</th>
+                            </tr>
+                          </thead>
+                          <tbody className="divide-y divide-sand/30 text-zinc-700">
+                            <tr className="hover:bg-sand/10">
+                              <td className="px-6 py-4 font-bold text-primary-dark">Material Grade</td>
+                              <td className="px-6 py-4">MR Plus (IS:303)</td>
+                              <td className="px-6 py-4">BWP Marine Grade (IS:710)</td>
+                              <td className="px-6 py-4 font-semibold text-forest">Premium BWP (IS:710)</td>
+                            </tr>
+                            <tr className="bg-sand/5 hover:bg-sand/10">
+                              <td className="px-6 py-4 font-bold text-primary-dark">Warranty Cover</td>
+                              <td className="px-6 py-4">15 Years Warranty</td>
+                              <td className="px-6 py-4">25 Years Warranty</td>
+                              <td className="px-6 py-4 font-bold text-forest">30 Years Warranty</td>
+                            </tr>
+                            <tr className="hover:bg-sand/10">
+                              <td className="px-6 py-4 font-bold text-primary-dark">Face Veneer</td>
+                              <td className="px-6 py-4">Selected Hardwood</td>
+                              <td className="px-6 py-4">Tropical Hardwood</td>
+                              <td className="px-6 py-4 font-semibold">Premium Gurjan Face</td>
+                            </tr>
+                            <tr className="bg-sand/5 hover:bg-sand/10">
+                              <td className="px-6 py-4 font-bold text-primary-dark">Core Layering</td>
+                              <td className="px-6 py-4">Quad-Core Pressed</td>
+                              <td className="px-6 py-4">Quad-Core Pressed</td>
+                              <td className="px-6 py-4 font-semibold">Calibrated (Zero Gaps/Overlaps)</td>
+                            </tr>
+                            <tr className="hover:bg-sand/10">
+                              <td className="px-6 py-4 font-bold text-primary-dark">Preservation Tech</td>
+                              <td className="px-6 py-4">Vacuum Pressure Treated</td>
+                              <td className="px-6 py-4">Vacuum Pressure Treated</td>
+                              <td className="px-6 py-4 font-semibold">Borosil / GLP Patent (100% Proof)</td>
+                            </tr>
+                            <tr className="bg-sand/5 hover:bg-sand/10">
+                              <td className="px-6 py-4 font-bold text-primary-dark">Moisture / Water</td>
+                              <td className="px-6 py-4">Moisture Resistant</td>
+                              <td className="px-6 py-4">Boiling Waterproof (BWP)</td>
+                              <td className="px-6 py-4 font-semibold">BWP (72h Test Passed) + Moisture 8-12%</td>
+                            </tr>
+                            <tr className="hover:bg-sand/10">
+                              <td className="px-6 py-4 font-bold text-primary-dark">Ideal Applications</td>
+                              <td className="px-6 py-4">Wardrobes, partitions, living room panels</td>
+                              <td className="px-6 py-4">Modular kitchens, bathrooms, yacht cabins</td>
+                              <td className="px-6 py-4 font-semibold text-forest">Luxury heavy-duty kitchens, coastal structures, bespoke joinery</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </section>

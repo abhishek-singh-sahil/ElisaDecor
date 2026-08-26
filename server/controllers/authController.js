@@ -91,6 +91,9 @@ import Media from '../models/Media.js';
 
 export const getDashboardMetrics = async (req, res) => {
   try {
+    const thirtyDaysAgo = new Date();
+    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+
     const [
       totalEnquiries,
       newEnquiries,
@@ -98,6 +101,8 @@ export const getDashboardMetrics = async (req, res) => {
       totalProducts,
       totalMedia,
       recentEnquiries,
+      enquiriesByProduct,
+      enquiriesOverTime,
     ] = await Promise.all([
       Enquiry.countDocuments({ status: { $ne: 'SPAM' } }),
       Enquiry.countDocuments({ status: 'NEW' }),
@@ -109,6 +114,28 @@ export const getDashboardMetrics = async (req, res) => {
         .limit(5)
         .populate('productId')
         .lean(),
+      Enquiry.aggregate([
+        { $match: { status: { $ne: 'SPAM' } } },
+        {
+          $group: {
+            _id: { $ifNull: ['$productNameSnapshot', 'General Enquiry'] },
+            count: { $sum: 1 },
+          },
+        },
+        { $project: { name: '$_id', count: 1, _id: 0 } },
+        { $sort: { count: -1 } },
+      ]),
+      Enquiry.aggregate([
+        { $match: { status: { $ne: 'SPAM' }, createdAt: { $gte: thirtyDaysAgo } } },
+        {
+          $group: {
+            _id: { $dateToString: { format: '%Y-%m-%d', date: '$createdAt' } },
+            count: { $sum: 1 },
+          },
+        },
+        { $project: { date: '$_id', count: 1, _id: 0 } },
+        { $sort: { date: 1 } },
+      ]),
     ]);
 
     return res.json({
@@ -121,6 +148,10 @@ export const getDashboardMetrics = async (req, res) => {
         totalMedia,
       },
       recentEnquiries,
+      charts: {
+        enquiriesByProduct,
+        enquiriesOverTime,
+      },
     });
   } catch (error) {
     console.error('Fetch dashboard metrics error:', error);

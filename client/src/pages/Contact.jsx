@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
-import { Phone, Mail, MapPin, Clock, Loader2 } from 'lucide-react';
+import { Phone, Mail, MapPin, Clock, Loader2, MessageCircle } from 'lucide-react';
 import api from '../api/axios';
 import ContactForm from '../components/ContactForm';
-import SEO from '../components/SEO';
+import SEO, { getLocalBusinessSchema } from '../components/SEO';
 
 export default function Contact() {
   const [settings, setSettings] = useState(null);
@@ -52,6 +52,7 @@ export default function Contact() {
         title="Contact Us | Corporate Headquarters & Locations"
         description="Reach out to Elisa Decor. Contact our corporate sales desk for plywood sheet queries, catalog documents, or direct wholesale dealer coordinates."
         canonical="/contact"
+        schema={getLocalBusinessSchema(settings)}
       />
 
       {/* 1. Header Banner */}
@@ -123,6 +124,18 @@ export default function Contact() {
                 </li>
               )}
             </ul>
+            {settings?.whatsApp && (
+              <div className="pt-6 border-t border-sand/40">
+                <a
+                  href={`https://wa.me/${settings.whatsApp.replace(/[^0-9]/g, '')}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="flex items-center justify-center gap-2 w-full py-3.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-bold uppercase tracking-wider transition-colors shadow-sm cursor-pointer"
+                >
+                  <MessageCircle size={16} /> Chat on WhatsApp
+                </a>
+              </div>
+            )}
           </div>
 
           {getEmbedMapUrl() && (

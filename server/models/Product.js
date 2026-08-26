@@ -27,6 +27,10 @@ const ProductSchema = new mongoose.Schema(
       type: String,
       trim: true,
     },
+    logo: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Media',
+    },
     heroImage: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Media',
@@ -41,6 +45,18 @@ const ProductSchema = new mongoose.Schema(
         ref: 'Media',
       },
     ],
+    warranty: {
+      type: String,
+      trim: true,
+    },
+    certifications: {
+      type: String,
+      trim: true,
+    },
+    brochureUrl: {
+      type: String,
+      trim: true,
+    },
     features: [
       {
         title: { type: String, trim: true },

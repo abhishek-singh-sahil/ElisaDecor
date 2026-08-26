@@ -12,6 +12,7 @@ export default function SEO({
   ogImage,
   noIndex = false,
   schema,
+  schemas,
   type = 'website',
 }) {
   const fullTitle = title || 'Elisa Decor | Premium Plywood & Interior Surfaces';
@@ -45,6 +46,9 @@ export default function SEO({
       {schema && (
         <script type="application/ld+json">{JSON.stringify(schema)}</script>
       )}
+      {schemas && Array.isArray(schemas) && schemas.filter(Boolean).map((sch, idx) => (
+        <script key={idx} type="application/ld+json">{JSON.stringify(sch)}</script>
+      ))}
     </Helmet>
   );
 }
@@ -84,5 +88,78 @@ export function getProductSchema(product) {
       name: 'Elisa Decor',
     },
     url: `${SITE_URL}/products/${product.slug}`,
+  };
+}
+
+export function getBreadcrumbSchema(breadcrumbs) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: breadcrumbs.map((crumb, idx) => ({
+      '@type': 'ListItem',
+      position: idx + 1,
+      name: crumb.name,
+      item: crumb.url.startsWith('http') ? crumb.url : `${SITE_URL}${crumb.url}`,
+    })),
+  };
+}
+
+export function getFAQSchema(faqs) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((faq) => ({
+      '@type': 'Question',
+      name: faq.question,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: faq.answer,
+      },
+    })),
+  };
+}
+
+export function getLocalBusinessSchema(settings) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'LocalBusiness',
+    name: settings?.brandName || 'Elisa Decor',
+    image: settings?.logo?.url || DEFAULT_OG_IMAGE,
+    '@id': SITE_URL,
+    url: SITE_URL,
+    telephone: settings?.phone,
+    address: {
+      '@type': 'PostalAddress',
+      streetAddress: settings?.address,
+      addressLocality: 'Jhumri Telaiya',
+      addressRegion: 'JH',
+      postalCode: '825409',
+      addressCountry: 'IN',
+    },
+    geo: {
+      '@type': 'GeoCoordinates',
+      latitude: 24.4333,
+      longitude: 85.5167,
+    },
+    openingHoursSpecification: {
+      '@type': 'OpeningHoursSpecification',
+      dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+      opens: '09:30',
+      closes: '18:30',
+    },
+  };
+}
+
+export function getWebsiteSchema() {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: 'Elisa Decor',
+    url: SITE_URL,
+    potentialAction: {
+      '@type': 'SearchAction',
+      target: `${SITE_URL}/products?search={search_term_string}`,
+      'query-input': 'required name=search_term_string',
+    },
   };
 }

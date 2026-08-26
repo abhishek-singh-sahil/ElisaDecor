@@ -31,7 +31,16 @@ export default function Header({ settings, products, openEnquiry }) {
     };
   }, [mobileMenuOpen]);
 
-  const navProducts = products?.filter((p) => p.status === 'PUBLISHED').slice(0, 3) || [];
+  const navProducts = products?.filter((p) => p.status === 'PUBLISHED') || [];
+  
+  // Sort nav products explicitly to ensure Decor Club Prime -> Elisa Club 710 -> Elisa Green order
+  const sortedNavProducts = [...navProducts].sort((a, b) => (a.sortOrder || 0) - (b.sortOrder || 0));
+
+  const isProductPage = pathname.startsWith('/products/');
+  const productSlug = isProductPage ? pathname.split('/products/')[1] : null;
+  const currentProduct = isProductPage ? products?.find((p) => p.slug === productSlug) : null;
+  const activeLogo = currentProduct?.logo || settings?.logo;
+
   const isHome = pathname === '/';
   const isTransparent = isHome && !scrolled;
 
@@ -54,10 +63,10 @@ export default function Header({ settings, products, openEnquiry }) {
         <div className="max-w-7xl mx-auto px-6 md:px-8 flex items-center justify-between">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-2">
-            {settings?.logo ? (
+            {activeLogo ? (
               <img
-                src={settings.logo.url}
-                alt={settings.brandName || 'Elisa Decor'}
+                src={activeLogo.url}
+                alt={currentProduct?.name || settings?.brandName || 'Elisa Decor'}
                 className="h-12 md:h-16 w-auto object-contain"
               />
             ) : (
@@ -74,9 +83,9 @@ export default function Header({ settings, products, openEnquiry }) {
           {/* Desktop Navigation */}
           <nav className="hidden lg:flex items-center gap-8 text-sm font-semibold tracking-wide">
             <Link to="/" className={pathname === '/' ? linkActiveStyle : linkInactiveStyle}>HOME</Link>
-            <Link to="/about" className={pathname === '/about' ? linkActiveStyle : linkInactiveStyle}>ABOUT</Link>
+            <Link to="/about" className={pathname === '/about' ? linkActiveStyle : linkInactiveStyle}>ABOUT US</Link>
 
-            {navProducts.map((p) => {
+            {sortedNavProducts.map((p) => {
               const url = `/products/${p.slug}`;
               return (
                 <Link key={p._id} to={url} className={pathname === url ? linkActiveStyle : linkInactiveStyle}>
@@ -133,24 +142,21 @@ export default function Header({ settings, products, openEnquiry }) {
 
           <nav className="flex flex-col gap-6 text-xl font-bold font-serif tracking-wider py-8 overflow-y-auto">
             <Link to="/" className="hover:text-accent transition-colors">Home</Link>
-            <Link to="/about" className="hover:text-accent transition-colors">About Elisa Decor</Link>
+            <Link to="/about" className="hover:text-accent transition-colors">About Us</Link>
 
-            <div className="border-l border-zinc-800 pl-4 space-y-4">
-              <span className="text-[10px] tracking-widest text-zinc-500 uppercase font-semibold block">Products</span>
-              {navProducts.map((p) => (
-                <Link
-                  key={p._id}
-                  to={`/products/${p.slug}`}
-                  className="block text-lg hover:text-accent font-sans font-semibold transition-colors"
-                >
-                  {p.name}
-                </Link>
-              ))}
-            </div>
+            {sortedNavProducts.map((p) => (
+              <Link
+                key={p._id}
+                to={`/products/${p.slug}`}
+                className="hover:text-accent transition-colors"
+              >
+                {p.name}
+              </Link>
+            ))}
 
             <Link to="/process" className="hover:text-accent transition-colors">Process</Link>
-            <Link to="/projects" className="hover:text-accent transition-colors">Projects Gallery</Link>
-            <Link to="/contact" className="hover:text-accent transition-colors">Contact Us</Link>
+            <Link to="/projects" className="hover:text-accent transition-colors">Projects</Link>
+            <Link to="/contact" className="hover:text-accent transition-colors">Contact</Link>
           </nav>
 
           <div className="border-t border-zinc-800 pt-6 space-y-4">

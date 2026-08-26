@@ -211,7 +211,7 @@ export default function AdminEnquiries() {
             { label: 'New', value: 'NEW' },
             { label: 'Contacted', value: 'CONTACTED' },
             { label: 'In Progress', value: 'IN_PROGRESS' },
-            { label: 'Qualified', value: 'QUALIFIED' },
+            { label: 'Converted', value: 'QUALIFIED' },
             { label: 'Closed', value: 'CLOSED' },
             { label: 'Spam', value: 'SPAM' },
           ].map((item) => (
@@ -368,7 +368,7 @@ export default function AdminEnquiries() {
                     <option value="NEW">New Lead</option>
                     <option value="CONTACTED">Contacted</option>
                     <option value="IN_PROGRESS">In Progress</option>
-                    <option value="QUALIFIED">Qualified</option>
+                    <option value="QUALIFIED">Converted</option>
                     <option value="CLOSED">Closed (Success)</option>
                     <option value="SPAM">Spam</option>
                   </select>

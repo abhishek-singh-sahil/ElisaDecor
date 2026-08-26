@@ -124,10 +124,10 @@ export async function sendEnquiryEmail(enquiry, settings) {
   if (process.env.RESEND_API_KEY) {
     try {
       await sendViaResend(sender, recipient, replyTo, subject, htmlContent);
-      return;
     } catch (resendErr) {
-      console.error('Failed to dispatch via Resend HTTP API. Falling back to SMTP:', resendErr.message);
+      console.error('Failed to dispatch via Resend HTTP API:', resendErr.message);
     }
+    return; // Don't fall back to SMTP if Resend is explicitly configured
   }
 
   if (!transporter) {
@@ -182,10 +182,10 @@ export async function sendCustomerConfirmation(enquiry, settings) {
   if (process.env.RESEND_API_KEY) {
     try {
       await sendViaResend(sender, enquiry.email, null, subject, htmlContent);
-      return;
     } catch (resendErr) {
-      console.error('Failed to dispatch confirmation via Resend HTTP API. Falling back to SMTP:', resendErr.message);
+      console.error('Failed to dispatch confirmation via Resend HTTP API:', resendErr.message);
     }
+    return; // Don't fall back to SMTP if Resend is explicitly configured
   }
 
   if (!transporter) {
@@ -250,10 +250,10 @@ export async function sendOTPEmail(email, otp, type) {
   if (process.env.RESEND_API_KEY) {
     try {
       await sendViaResend(sender, email, null, subject, htmlContent);
-      return;
     } catch (resendErr) {
-      console.error('Failed to dispatch OTP via Resend HTTP API. Falling back to SMTP:', resendErr.message);
+      console.error('Failed to dispatch OTP via Resend HTTP API:', resendErr.message);
     }
+    return; // Don't fall back to SMTP if Resend is explicitly configured
   }
 
   if (!transporter) {

@@ -1,6 +1,9 @@
 import 'dotenv/config';
 import mongoose from 'mongoose';
 import bcrypt from 'bcryptjs';
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
 import AdminUser from '../models/AdminUser.js';
 import SiteSetting from '../models/SiteSetting.js';
 import Homepage from '../models/Homepage.js';
@@ -9,6 +12,9 @@ import FAQ from '../models/FAQ.js';
 import Testimonial from '../models/Testimonial.js';
 import Media from '../models/Media.js';
 import Project from '../models/Project.js';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/elisadecor';
 
@@ -23,6 +29,53 @@ async function createMediaRecord(url, filename, title = '', altText = '') {
     height: 800,
     size: 250000,
     altText: altText || title,
+    title: title,
+    caption: title,
+    folder: 'seeding',
+  });
+}
+
+async function copyAndSeedUploadedCreative(srcPath, filename, title) {
+  const uploadDir = path.join(process.cwd(), 'uploads');
+  if (!fs.existsSync(uploadDir)) {
+    fs.mkdirSync(uploadDir, { recursive: true });
+  }
+
+  const destPath = path.join(uploadDir, filename);
+  let localUrl = `/uploads/${filename}`;
+  let size = 250000;
+
+  if (fs.existsSync(srcPath)) {
+    try {
+      fs.copyFileSync(srcPath, destPath);
+      const stats = fs.statSync(destPath);
+      size = stats.size;
+      console.log(`Successfully copied creative to uploads: ${filename}`);
+    } catch (err) {
+      console.error(`Failed to copy creative ${filename}:`, err.message);
+    }
+  } else {
+    console.warn(`Local source path not found for creative ${filename}, using fallback URL.`);
+    // Fallback to stock unsplash image if local creative file is missing
+    if (filename.includes('green')) {
+      localUrl = 'https://images.unsplash.com/photo-1533090161767-e6ffed986c88?auto=format&fit=crop&w=1200&q=80';
+    } else if (filename.includes('club-710')) {
+      localUrl = 'https://images.unsplash.com/photo-1618219908412-a29a1bb7b86e?auto=format&fit=crop&w=1200&q=80';
+    } else {
+      localUrl = 'https://images.unsplash.com/photo-1540518614846-7eded433c457?auto=format&fit=crop&w=1200&q=80';
+    }
+  }
+
+  return await Media.create({
+    url: localUrl,
+    publicId: `seeded-creative-${filename.split('.')[0]}`,
+    filename: filename,
+    originalFilename: filename,
+    mimeType: 'image/jpeg',
+    width: 1200,
+    height: 800,
+    size: size,
+    altText: title,
     title: title,
     caption: title,
     folder: 'seeding',
@@ -66,10 +119,28 @@ async function seed() {
   });
   console.log(`Default Super Admin created: ${admin.email} (password: admin123)`);
 
-  // 2. Seed Verified, Stable, Premium Wood & Timber Plywood Media Assets
-  console.log('Seeding verified plywood and wood texture assets...');
+  // 2. Copy and Seed Product Creatives (Source of Truth)
+  console.log('Seeding product branding creative assets...');
+  
+  const creativeGreen = await copyAndSeedUploadedCreative(
+    'C:/Users/abhis/.gemini/antigravity/brain/fe54d09b-7ee4-49bc-90cd-2bf4fa60e040/.user_uploaded/media_1787679349081.jpg',
+    'elisa-green-creative.jpg',
+    'Elisa Green Plywood Creative Showcase'
+  );
+  
+  const creativeClub710 = await copyAndSeedUploadedCreative(
+    'C:/Users/abhis/.gemini/antigravity/brain/fe54d09b-7ee4-49bc-90cd-2bf4fa60e040/.user_uploaded/media_1787679355038.jpg',
+    'elisa-club-710-creative.jpg',
+    'Elisa Club 710 Plywood Creative Showcase'
+  );
+  
+  const creativePrime = await copyAndSeedUploadedCreative(
+    'C:/Users/abhis/.gemini/antigravity/brain/fe54d09b-7ee4-49bc-90cd-2bf4fa60e040/.user_uploaded/media_1787679361676.jpg',
+    'decor-club-prime-creative.jpg',
+    'Decor Club Prime Plywood Creative Showcase'
+  );
 
-  // Elisa Green (Calibrated BWR Plywood) Images
+  // Seed generic plywood/wood texture assets for galleries and listings
   const greenHero = await createMediaRecord(
     'https://images.unsplash.com/photo-1533090161767-e6ffed986c88?auto=format&fit=crop&w=1200&q=80',
     'elisa-green-hero.jpg',
@@ -109,7 +180,6 @@ async function seed() {
     'Durable residential cabinet structures'
   );
 
-  // Elisa Club 710 (BWP Marine Plywood) Images
   const clubHero = await createMediaRecord(
     'https://images.unsplash.com/photo-1618219908412-a29a1bb7b86e?auto=format&fit=crop&w=1200&q=80',
     'elisa-club-hero.jpg',
@@ -149,44 +219,43 @@ async function seed() {
     'Yacht cabins and marine grade wood joinery'
   );
 
-  // Elisa Premium (Exotic Surface Boards) Images
-  const premHero = await createMediaRecord(
+  const primeHero = await createMediaRecord(
     'https://images.unsplash.com/photo-1540518614846-7eded433c457?auto=format&fit=crop&w=1200&q=80',
-    'elisa-premium-hero.jpg',
-    'Luxurious lobby wood veneer panel walls',
-    'Designer architectural wood surfaces showcasing high-end pre-laminated boards.'
+    'decor-club-prime-hero.jpg',
+    'Luxurious wood veneer paneled room',
+    'Premium marine-grade plywood structures displaying high mechanical strength and luxury claddings.'
   );
-  const premMobileHero = await createMediaRecord(
+  const primeMobileHero = await createMediaRecord(
     'https://images.unsplash.com/photo-1540518614846-7eded433c457?auto=format&fit=crop&w=800&q=80',
-    'elisa-premium-mobile-hero.jpg',
-    'Elisa Premium mobile wood paneling'
+    'decor-club-prime-mobile-hero.jpg',
+    'Decor Club Prime mobile wood paneling'
   );
-  const premGal1 = await createMediaRecord(
+  const primeGal1 = await createMediaRecord(
     'https://images.unsplash.com/photo-1538688525198-9b88f6f53126?auto=format&fit=crop&w=800&q=80',
-    'elisa-premium-grain.jpg',
-    'Architectural horizontal wood slats',
-    'Smooth, pre-laminated decorative board surfaces.'
+    'decor-club-prime-grain.jpg',
+    'Architectural wood veneer grain',
+    'Smooth wood veneer face applied over multi-layer calibrated plywood.'
   );
-  const premGal2 = await createMediaRecord(
+  const primeGal2 = await createMediaRecord(
     'https://images.unsplash.com/photo-1618219908412-a29a1bb7b86e?auto=format&fit=crop&w=800&q=80',
-    'elisa-premium-panels.jpg',
-    'Exotic veneer vertical panel alignments',
-    'Premium raw wood veneers applied over calibrated plywood sheets.'
+    'decor-club-prime-paneling.jpg',
+    'Premium vertical wood partitions',
+    'Zero gaps and high screw holding capacity panel constructions.'
   );
-  const premApp1 = await createMediaRecord(
+  const primeApp1 = await createMediaRecord(
     'https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=600&q=80',
-    'elisa-premium-office.jpg',
-    'Executive office wood wall panelings'
+    'decor-club-prime-office.jpg',
+    'Premium corporate office executive space'
   );
-  const premApp2 = await createMediaRecord(
+  const primeApp2 = await createMediaRecord(
     'https://images.unsplash.com/photo-1540518614846-7eded433c457?auto=format&fit=crop&w=600&q=80',
-    'elisa-premium-lobby.jpg',
-    'Premium lobby veneer cladding panels'
+    'decor-club-prime-lobby.jpg',
+    'Luxury hotel entrance lobby timber wall panels'
   );
-  const premApp3 = await createMediaRecord(
+  const primeApp3 = await createMediaRecord(
     'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=600&q=80',
-    'elisa-premium-residential.jpg',
-    'Luxury joinery backing panels'
+    'decor-club-prime-residential.jpg',
+    'Luxury modular wardrobe and kitchen partitions'
   );
 
   console.log('All Media assets saved.');
@@ -225,10 +294,10 @@ async function seed() {
     },
     navigation: [
       { label: 'Home', url: '/', order: 1, visible: true },
-      { label: 'About', url: '/about', order: 2, visible: true },
+      { label: 'About Us', url: '/about', order: 2, visible: true },
       { label: 'Elisa Green', url: '/products/elisa-green', order: 3, visible: true },
       { label: 'Elisa Club 710', url: '/products/elisa-club-710', order: 4, visible: true },
-      { label: 'Elisa Premium', url: '/products/elisa-premium', order: 5, visible: true },
+      { label: 'Decor Club Prime', url: '/products/decor-club-prime', order: 5, visible: true },
       { label: 'Process', url: '/process', order: 6, visible: true },
       { label: 'Projects', url: '/projects', order: 7, visible: true },
       { label: 'Contact', url: '/contact', order: 9, visible: true },
@@ -249,23 +318,27 @@ async function seed() {
   const p1 = await Product.create({
     name: 'Elisa Green',
     slug: 'elisa-green',
-    productCode: 'ELG-MR-01',
+    productCode: 'EL-GREEN-303',
     shortDescription: 'High-density, premium moisture-resistant plywood engineered for long-lasting interiors.',
-    longDescription: 'Elisa Green is our premium eco-friendly Commercial MR (Moisture Resistant) and BWR (Boiling Water Resistant) grade plywood. Manufactured using high-quality hardwood timber and bonded with synthetic MUF resin, it provides exceptional stability, resistance to termites, and zero core gap.',
-    heroImage: greenHero._id,
+    longDescription: 'Elisa Green is our premium eco-friendly Commercial MR Plus (Moisture Resistant - IS 303) grade plywood. Manufactured using high-quality hardwood timber and bonded with synthetic MUF resin, it provides exceptional stability, moisture resistance, anti-termite characteristics, and zero core gaps.',
+    logo: creativeGreen._id,
+    heroImage: creativeGreen._id,
     mobileHeroImage: greenMobileHero._id,
-    gallery: [greenGal1._id, greenGal2._id],
+    gallery: [creativeGreen._id, greenHero._id, greenGal1._id, greenGal2._id],
+    warranty: '15 Years',
+    certifications: 'MR - IS 303 Grade, E0/E1 Compliant',
     features: [
-      { title: 'Eco-Friendly / Low Emission', description: 'Certified E1 emission standard ensuring healthy indoor air quality.', icon: 'Leaf' },
-      { title: 'Termite & Borer Resistant', description: 'Treated with advanced chemical preservatives to prevent insect damage.', icon: 'ShieldAlert' },
-      { title: 'Zero Core Gaps', description: 'Manufactured with seamless core layers to prevent warping and internal voids.', icon: 'Grid' },
+      { title: 'Water Resistant', description: 'Long-lasting protection against moisture and dampness.', icon: 'Droplets' },
+      { title: 'Moisture Resistant Interior Grade', description: 'Formulated with amino adhesives and vacuum pressure chemical treatment.', icon: 'ShieldAlert' },
+      { title: 'Eco Friendly (E0/E1)', description: 'Low formaldehyde emissions ensuring healthy indoor air quality.', icon: 'Leaf' },
+      { title: '100% Calibrated Surface', description: 'Perfect wood grain thickness with zero surface undulations.', icon: 'Grid' },
     ],
     specifications: [
-      { key: 'Grade', value: 'BWR Grade (IS:303)' },
-      { key: 'Timber Source', value: 'Selected Hardwood' },
-      { key: 'Density', value: '720 kg/m³' },
+      { key: 'Grade', value: 'MR Plus Grade (IS:303)' },
+      { key: 'Timber Source', value: 'Selected Sustainable Hardwood' },
+      { key: 'Technology', value: 'Quad-Core Press & Vacuum Pressure Chemical Treatment (VPCT)' },
+      { key: 'Pest Resistance', value: 'Anti-Termite, Anti-Fungal, & Anti-Bacterial' },
       { key: 'Moisture Content', value: '8 - 12%' },
-      { key: 'Adhesive Used', value: 'Melamine Urea Formaldehyde (MUF) Resin' },
       { key: 'Thickness Options', value: '6mm, 9mm, 12mm, 16mm, 19mm' },
     ],
     applications: [
@@ -274,43 +347,47 @@ async function seed() {
       { title: 'Living Room Furniture', description: 'Seamless screw holding capacity for modern sofas, beds, and tables.', image: greenApp3._id },
     ],
     benefits: [
-      'High resistance to changing weather and humidity conditions',
-      'Advanced vacuum-pressure chemical treatment protects against borers and termites',
-      'High screw-holding capacity ensures structural durability over decades',
+      'Dimensional Stability: Calibrated 100% with zero surface undulations or core gaps',
+      'Vacuum Pressure Chemical Treatment (VPCT) for complete pest and microbial resistance',
+      'Formaldehyde class E0 / E1 compliance for healthier indoor air'
     ],
     faqs: [
-      { question: 'Is Elisa Green plywood water-resistant?', answer: 'Yes, Elisa Green is a BWR (Boiling Water Resistant) grade plywood.' },
-      { question: 'What is the emission rating of Elisa Green?', answer: 'Elisa Green conforms to E1 emission standards.' },
+      { question: 'Is Elisa Green plywood water-resistant?', answer: 'Yes, Elisa Green is an MR Plus grade water-resistant interior plywood, offering long-lasting moisture protection.' },
+      { question: 'What is the emission rating of Elisa Green?', answer: 'Elisa Green conforms to strict E0/E1 formaldehyde emission standards.' },
     ],
     status: 'PUBLISHED',
-    sortOrder: 1,
+    sortOrder: 3,
     seo: {
-      title: 'Elisa Green Plywood | BWR Grade Premium Hardwood Board',
-      description: 'Elisa Green is a premium BWR grade hardwood plywood with zero core gaps, termite resistance, and low formaldehyde emissions.',
-      ogImage: greenHero._id,
+      title: 'Elisa Green Plywood | MR Plus Grade Premium Hardwood Board',
+      description: 'Elisa Green is a premium MR Plus grade hardwood plywood with zero core gaps, termite resistance, and low formaldehyde emissions.',
+      ogImage: creativeGreen._id,
     },
   });
 
   const p2 = await Product.create({
     name: 'Elisa Club 710',
     slug: 'elisa-club-710',
-    productCode: 'ELC-BWP-710',
+    productCode: 'EL-CLUB-710',
     shortDescription: 'Super premium, 100% waterproof Marine-Grade plywood designed for extreme environments.',
-    longDescription: 'Elisa Club 710 is our flagship architectural-grade BWP (Boiling Water Proof) Marine Plywood. Built with carefully selected premium tropical hardwood and bonded with un-extended Phenol Formaldehyde resin at high pressure.',
-    heroImage: clubHero._id,
+    longDescription: 'Elisa Club 710 is our flagship architectural-grade BWP (Boiling Water Proof) Marine Plywood. Built with carefully selected premium tropical hardwood and bonded with un-extended Phenol Formaldehyde resin at high pressure and temperature to ensure permanent waterproofing and exceptional strength.',
+    logo: creativeClub710._id,
+    heroImage: creativeClub710._id,
     mobileHeroImage: clubMobileHero._id,
-    gallery: [clubGal1._id, clubGal2._id],
+    gallery: [creativeClub710._id, clubHero._id, clubGal1._id, clubGal2._id],
+    warranty: '25 Years',
+    certifications: 'BWP - IS 710 Grade, E0/E1 Compliant',
     features: [
-      { title: '100% Waterproof (BWP)', description: 'Can withstand continuous exposure to boiling water without layer separation.', icon: 'Droplets' },
-      { title: 'Glueshield Technology', description: 'Bonded with high-quality Phenol Formaldehyde resin for permanent adhesion.', icon: 'Wrench' },
-      { title: 'Termite and Marine Borer Proof', description: 'Infused with advanced organic chemicals for lifetimes of pest protection.', icon: 'Shield' },
+      { title: 'Boiling Waterproof (BWP)', description: 'Can withstand continuous boiling water exposure without layer separation.', icon: 'Droplets' },
+      { title: 'Quad-Core Press Tech', description: 'High density core compression for structural durability.', icon: 'Wrench' },
+      { title: 'Termite & Borer Proof', description: 'Chemically treated with anti-termite, anti-fungal, and anti-bacterial barriers.', icon: 'Shield' },
+      { title: 'Vacuum Pressure Treatment', description: 'Deep preservative impregnation under heavy pressure cycles.', icon: 'Sliders' },
     ],
     specifications: [
       { key: 'Grade', value: 'BWP Marine Grade (IS:710)' },
       { key: 'Timber Source', value: 'Premium Tropical Hardwood' },
-      { key: 'Density', value: '800 kg/m³' },
-      { key: 'Adhesive Used', value: 'Phenol Formaldehyde (PF) Resin' },
-      { key: 'Boiling Water Resistance', value: 'Passes 72 hours boiling test' },
+      { key: 'Technology', value: 'Quad-Core Press & Vacuum Pressure Treatment' },
+      { key: 'Adhesive Used', value: 'Un-extended Phenol Formaldehyde (PF) Resin' },
+      { key: 'Pest Protection', value: '100% Termite, Fungal & Borer Proof' },
       { key: 'Thickness Options', value: '6mm, 9mm, 12mm, 16mm, 19mm, 25mm' },
     ],
     applications: [
@@ -319,62 +396,71 @@ async function seed() {
       { title: 'Yachts & Marine Interior', description: 'Meets rigorous standards for marine crafts and seaside villas.', image: clubApp3._id },
     ],
     benefits: [
-      'Engineered using premium tropical hardwood for superior density and weight',
-      'Treated with specific toxic chemical combinations to repel marine organisms',
-      'Warp-free construction under high temperature and high moisture zones',
+      'Boiling Waterproof (BWP - IS 710) grade suitable for extreme moisture zones',
+      'Dimensional stability: Calibrated 100% with zero surface undulations or core gaps',
+      'Treated with Vacuum Pressure Technology (VPCT) for lifetime pest and marine borer protection'
     ],
     faqs: [
-      { question: 'What does IS:710 grade mean?', answer: 'IS:710 is the Bureau of Indian Standards code for Marine Plywood.' },
-      { question: 'How long can Elisa Club 710 last in water?', answer: 'Elisa Club 710 uses 100% Phenolic resin bonding that is permanently waterproof.' },
+      { question: 'What does IS:710 grade mean?', answer: 'IS:710 is the Bureau of Indian Standards code for Marine Grade Plywood.' },
+      { question: 'How long is the warranty on Elisa Club 710?', answer: 'Elisa Club 710 comes with a 25-year manufacturer warranty against delamination.' },
     ],
     status: 'PUBLISHED',
     sortOrder: 2,
     seo: {
       title: 'Elisa Club 710 | Premium IS:710 BWP Marine Plywood',
       description: 'Discover Elisa Club 710 Marine Grade BWP Plywood. 100% waterproof, termite proof, tropical hardwood, designed for modular kitchens and luxury bathrooms.',
-      ogImage: clubHero._id,
+      ogImage: creativeClub710._id,
     },
   });
 
   const p3 = await Product.create({
-    name: 'Elisa Premium',
-    slug: 'elisa-premium',
-    productCode: 'ELP-DECOR-03',
-    shortDescription: 'Premium decorative panels and custom plywood sheets for high-end interiors.',
-    longDescription: 'Elisa Premium represents our designer architectural wood range. Suited for architectural feature walls, entry lobbies, and luxury custom furniture veneering.',
-    heroImage: premHero._id,
-    mobileHeroImage: premMobileHero._id,
-    gallery: [premGal1._id, premGal2._id],
+    name: 'Decor Club Prime',
+    slug: 'decor-club-prime',
+    productCode: 'DCP-PRIME-710',
+    shortDescription: 'Super-premium Boiling Water Proof marine calibrated plywood with premium Gurjan faces.',
+    longDescription: 'Decor Club Prime is a super-premium Boiling Water Proof (BWP) marine-grade plywood conforming to IS:710 standards. Backed by 25 stringent BIS tests, it is manufactured using select exotic hardwood cores and a premium Gurjan face, bonded with Phenol Formaldehyde synthetic resin. It features Calibrated core layers with zero gaps, advanced Glue Line Protection (GLP) for 100% borer and termite proofing, and exceptional mechanical strength.',
+    logo: creativePrime._id,
+    heroImage: creativePrime._id,
+    mobileHeroImage: primeMobileHero._id,
+    gallery: [creativePrime._id, primeHero._id, primeGal1._id, primeGal2._id],
+    warranty: '30 Years',
+    certifications: 'BWP - IS 710 Grade, BIS Tested (25 Stringent Tests Passed)',
     features: [
-      { title: 'Dynamic Customization', description: 'Fully configurable features, tags, and descriptive copy via CMS.', icon: 'Settings' },
-      { title: 'Premium Aesthetics', description: 'Engineered for high-end designer finishes and surface styling.', icon: 'Sparkles' },
-      { title: 'Structural Versatility', description: 'Suited for both structural furniture backings and designer visible panels.', icon: 'Layout' },
+      { title: 'BWP (IS:710)', description: 'Boiling Water Proof grade conforming to rigorous IS:710 standards.', icon: 'Droplets' },
+      { title: 'Glue Line Protection (GLP)', description: 'Borosil / GLP patent for 100% borer and termite proofing.', icon: 'Shield' },
+      { title: 'Calibrated Core', description: 'Seamless layers with zero gaps or overlaps in the core.', icon: 'Grid' },
+      { title: '65% Stronger Glue Shear', description: 'GSS is 65% stronger than ordinary plywood.', icon: 'Sparkles' },
     ],
     specifications: [
-      { key: 'Grade', value: 'Premium Grade' },
-      { key: 'Standard Sizes', value: '8ft x 4ft sheets' },
-      { key: 'Timber Type', value: 'Selected Exotic Hardwood' },
-      { key: 'Veneer Compatibility', value: 'Optimized for raw veneers and high pressure laminates' },
+      { key: 'Grade', value: 'BWP Marine Grade (IS:710)' },
+      { key: 'Face Veneer', value: 'Premium Gurjan Face' },
+      { key: 'Glue / Resin', value: 'Phenol Formaldehyde (PF) Synthetic Resin' },
+      { key: 'Moisture Content', value: '8% - 12%' },
+      { key: 'Mechanical Properties', value: 'Screw Holding Strength >200 kg, Nail Holding Strength >85 kg' },
+      { key: 'Thickness Range', value: '4mm, 6mm, 9mm, 12mm, 16mm, 19mm, 25mm' },
     ],
     applications: [
-      { title: 'Designer Interiors', description: 'Premium visual paneling for custom lounges, offices, and entrance lobbies.', image: premApp1._id },
-      { title: 'Luxury Furniture', description: 'Perfect backing material for high-end veneer and laminate work.', image: premApp2._id },
-      { title: 'Bespoke Joinery', description: 'Perfect structural support for premium cabinet doors and shelving.', image: premApp3._id },
+      { title: 'Luxury Kitchen Cabinetry', description: 'Maximum structural reliability in environments exposed to heat and steam.', image: primeApp3._id },
+      { title: 'Hotel Lobbies & Wood Cladding', description: 'Warp-free wood veneer alignment and premium structural stability.', image: primeApp2._id },
+      { title: 'Bespoke Executive Furnishings', description: 'Uniform calibration and immense strength for custom office conference desks.', image: primeApp1._id },
     ],
     benefits: [
-      'Customizable product parameters',
-      'Designed to accommodate exotic veneers',
-      'Perfect structural support for premium joinery',
+      '30 Years Warranty: Manufacturer warranty against any manufacturing defects under normal usage',
+      'calibrated core layers ensure flat surfaces with zero core gaps or overlapping',
+      'Borosil / GLP: Patent Glue Line Protection and finished panel treatment for complete termite/borer protection',
+      'Glue Shear Strength (GSS) is 65% stronger than ordinary plywood',
+      'Screw holding strength of >200 kg and nail holding strength of >85 kg'
     ],
     faqs: [
-      { question: 'What is Elisa Premium?', answer: 'Elisa Premium is the third product range from Elisa Decor, fully manageable from the CMS.' },
+      { question: 'What is the warranty period for Decor Club Prime?', answer: 'Decor Club Prime comes with a 30-year manufacturer warranty against manufacturing defects under normal usage.' },
+      { question: 'How is Decor Club Prime protected from borers?', answer: 'It features patent Borosil / Glue Line Protection (GLP) and finished panel treatment for 100% borer and termite proofing.' },
     ],
     status: 'PUBLISHED',
-    sortOrder: 3,
+    sortOrder: 1,
     seo: {
-      title: 'Elisa Premium Plywood | Custom Interior Materials',
-      description: 'Elisa Premium is the upcoming product category from Elisa Decor. Fully customizable via our administrative panel.',
-      ogImage: premHero._id,
+      title: 'Decor Club Prime | Premium Gurjan Face IS:710 Plywood',
+      description: 'Decor Club Prime is a premium BWP marine-grade plywood with Gurjan face veneer, Borosil GLP termite protection, and a 30-year warranty.',
+      ogImage: creativePrime._id,
     },
   });
 
@@ -390,6 +476,18 @@ async function seed() {
         content: {
           slides: [
             {
+              title: 'Decor Club Prime Plywood',
+              subtitle: 'Gurjan Face BWP IS:710 Marine Grade',
+              eyebrow: 'ELISA DECOR',
+              description: 'Super-premium calibrated marine plywood with patent Glue Line Protection, passed 25 stringent BIS tests, offering a 30-year warranty.',
+              ctaText1: 'Explore Club Prime',
+              ctaUrl1: '/products/decor-club-prime',
+              ctaText2: 'Request Quote',
+              ctaUrl2: '/contact',
+              desktopImage: 'https://images.unsplash.com/photo-1540518614846-7eded433c457?auto=format&fit=crop&w=1600&q=80',
+              mobileImage: 'https://images.unsplash.com/photo-1540518614846-7eded433c457?auto=format&fit=crop&w=800&q=80',
+            },
+            {
               title: 'Elisa Club 710 Plywood',
               subtitle: '100% Waterproof BWP Marine-Grade',
               eyebrow: 'ELISA DECOR',
@@ -403,27 +501,15 @@ async function seed() {
             },
             {
               title: 'Elisa Green Plywood',
-              subtitle: 'Precision Calibrated BWR Sheets',
+              subtitle: 'Precision Calibrated MR Plus Sheets',
               eyebrow: 'ELISA DECOR',
-              description: 'Eco-friendly, moisture-resistant plywood with E1 low emissions and zero core gaps. Manufactured for wardrobes, paneling, and interior woodwork.',
+              description: 'Eco-friendly, moisture-resistant plywood with E0/E1 low emissions and zero core gaps. Manufactured for wardrobes, paneling, and interior woodwork.',
               ctaText1: 'Explore Elisa Green',
               ctaUrl1: '/products/elisa-green',
               ctaText2: 'Request Quote',
               ctaUrl2: '/contact',
               desktopImage: 'https://images.unsplash.com/photo-1533090161767-e6ffed986c88?auto=format&fit=crop&w=1600&q=80',
               mobileImage: 'https://images.unsplash.com/photo-1533090161767-e6ffed986c88?auto=format&fit=crop&w=800&q=80',
-            },
-            {
-              title: 'Elisa Premium Boards',
-              subtitle: 'Exclusive Architectural Wood Surfaces',
-              eyebrow: 'ELISA DECOR',
-              description: 'High-density decor boards and custom calibrated panels designed to accommodate premium veneer overlays in residential cladding and commercial lobbies.',
-              ctaText1: 'Explore Elisa Premium',
-              ctaUrl1: '/products/elisa-premium',
-              ctaText2: 'Request Quote',
-              ctaUrl2: '/contact',
-              desktopImage: 'https://images.unsplash.com/photo-1540518614846-7eded433c457?auto=format&fit=crop&w=1600&q=80',
-              mobileImage: 'https://images.unsplash.com/photo-1540518614846-7eded433c457?auto=format&fit=crop&w=800&q=80',
             },
           ],
         },
@@ -470,8 +556,8 @@ async function seed() {
           subtitle: 'Enquire today to receive tailored product consultations and custom quotes.',
           primaryCtaText: 'Enquire Now',
           primaryCtaUrl: '/contact',
-          secondaryCtaText: 'Download Brochures',
-          secondaryCtaUrl: '/contact',
+          secondaryCtaText: 'Explore Core Standards',
+          secondaryCtaUrl: '/process',
         },
         settings: { align: 'center' },
       },
@@ -524,15 +610,15 @@ async function seed() {
   await Project.create({
     title: 'Corporate Executive Boardroom',
     slug: 'corporate-executive-boardroom',
-    description: 'Asymmetric feature walls and custom conference table backing surfaces supported by Elisa Premium boards for warp-free wood veneer alignment and structural stability.',
-    coverImage: premHero._id,
-    gallery: [premGal1._id, premGal2._id],
+    description: 'Asymmetric feature walls and custom conference table backing surfaces supported by Decor Club Prime calibrated boards for warp-free wood veneer alignment and structural stability.',
+    coverImage: primeHero._id,
+    gallery: [primeGal1._id, primeGal2._id],
     category: 'COMMERCIAL',
     location: 'Patna, Bihar',
     productsUsed: [p3._id],
     status: 'PUBLISHED',
     sortOrder: 3,
-    seo: { title: 'Commercial Office Boardroom Wall Cladding', description: 'Executive workspace wooden claddings assembled with Elisa Premium panels.' }
+    seo: { title: 'Commercial Office Boardroom Wall Cladding', description: 'Executive workspace wooden claddings assembled with Decor Club Prime marine plywood.' }
   });
   console.log('Projects Gallery showcases seeded.');
 

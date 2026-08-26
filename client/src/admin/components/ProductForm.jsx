@@ -32,9 +32,13 @@ export default function ProductForm({ initialData, isEdit = false, id }) {
   const [sortOrder, setSortOrder] = useState(initialData?.sortOrder || 0);
 
   // Media references
+  const [logo, setLogo] = useState(initialData?.logo || null);
   const [heroImage, setHeroImage] = useState(initialData?.heroImage || null);
   const [mobileHeroImage, setMobileHeroImage] = useState(initialData?.mobileHeroImage || null);
   const [gallery, setGallery] = useState(initialData?.gallery || []);
+  const [warranty, setWarranty] = useState(initialData?.warranty || '');
+  const [certifications, setCertifications] = useState(initialData?.certifications || '');
+  const [brochureUrl, setBrochureUrl] = useState(initialData?.brochureUrl || '');
 
   // Features list: [{ title, description, icon }]
   const [features, setFeatures] = useState(initialData?.features || []);
@@ -75,7 +79,9 @@ export default function ProductForm({ initialData, isEdit = false, id }) {
 
   // Handle Media selections
   const handleMediaSelect = (asset) => {
-    if (mediaTarget === 'hero') {
+    if (mediaTarget === 'logo') {
+      setLogo(asset);
+    } else if (mediaTarget === 'hero') {
       setHeroImage(asset);
     } else if (mediaTarget === 'mobileHero') {
       setMobileHeroImage(asset);
@@ -154,9 +160,13 @@ export default function ProductForm({ initialData, isEdit = false, id }) {
       longDescription,
       status,
       sortOrder: parseInt(sortOrder || '0'),
+      logo: logo?._id || null,
       heroImage: heroImage?._id || null,
       mobileHeroImage: mobileHeroImage?._id || null,
       gallery: gallery.map((g) => g._id),
+      warranty,
+      certifications,
+      brochureUrl,
       features,
       specifications,
       applications: applications.map((app) => ({
@@ -290,6 +300,39 @@ export default function ProductForm({ initialData, isEdit = false, id }) {
                   className="w-full rounded-lg bg-zinc-800 border border-zinc-700 px-4 py-2.5 text-sm text-white focus:outline-none focus:ring-1 focus:ring-emerald-500"
                 />
               </div>
+
+              <div>
+                <label className="block text-xs font-semibold text-zinc-300 mb-1 font-sans">Warranty (e.g. 15 Years)</label>
+                <input
+                  type="text"
+                  value={warranty}
+                  onChange={(e) => setWarranty(e.target.value)}
+                  placeholder="e.g. 15 Years, 25 Years"
+                  className="w-full rounded-lg bg-zinc-800 border border-zinc-700 px-4 py-2.5 text-sm text-white focus:outline-none focus:ring-1 focus:ring-emerald-500"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-semibold text-zinc-300 mb-1 font-sans">Certifications</label>
+                <input
+                  type="text"
+                  value={certifications}
+                  onChange={(e) => setCertifications(e.target.value)}
+                  placeholder="e.g. IS:303, IS:710 Grade"
+                  className="w-full rounded-lg bg-zinc-800 border border-zinc-700 px-4 py-2.5 text-sm text-white focus:outline-none focus:ring-1 focus:ring-emerald-500"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-semibold text-zinc-300 mb-1 font-sans">Brochure/Technical PDF URL</label>
+                <input
+                  type="text"
+                  value={brochureUrl}
+                  onChange={(e) => setBrochureUrl(e.target.value)}
+                  placeholder="e.g. /uploads/brochure.pdf or https://..."
+                  className="w-full rounded-lg bg-zinc-800 border border-zinc-700 px-4 py-2.5 text-sm text-white focus:outline-none focus:ring-1 focus:ring-emerald-500 font-mono text-xs"
+                />
+              </div>
             </div>
 
             <div className="space-y-4">
@@ -346,10 +389,46 @@ export default function ProductForm({ initialData, isEdit = false, id }) {
         {/* PANEL 2: MEDIA ASSIGNMENT */}
         {activeTab === 'media' && (
           <div className="space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {/* Product Logo */}
+              <div className="bg-zinc-800/40 p-4 border border-zinc-855 rounded-lg">
+                <label className="block text-xs font-semibold text-zinc-300 mb-3 font-sans">Product Logo</label>
+                <div className="flex items-center gap-4">
+                  <div className="h-24 w-24 rounded border border-zinc-700 overflow-hidden flex items-center justify-center bg-zinc-950">
+                    {logo ? (
+                      <img src={logo.url} alt="Logo" className="h-full w-full object-contain p-2" />
+                    ) : (
+                      <ImageIcon className="text-zinc-600 h-8 w-8" />
+                    )}
+                  </div>
+                  <div className="flex flex-col gap-2">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setMediaTarget('logo');
+                        setMediaPickerOpen(true);
+                      }}
+                      className="px-3 py-1.5 bg-zinc-800 hover:bg-zinc-700 text-white rounded text-xs font-medium border border-zinc-750 transition-colors"
+                    >
+                      Select Logo
+                    </button>
+                    {logo && (
+                      <button
+                        type="button"
+                        onClick={() => setLogo(null)}
+                        className="text-[10px] text-red-400 hover:underline text-left font-sans"
+                      >
+                        Remove
+                      </button>
+                    )}
+                  </div>
+                </div>
+              </div>
+
               {/* Desktop Hero Image */}
               <div className="bg-zinc-800/40 p-4 border border-zinc-850 rounded-lg">
-                <label className="block text-xs font-semibold text-zinc-300 mb-3 font-sans">Desktop Hero Image</label>
+                <label className="block text-xs font-semibold text-zinc-300 mb-1 font-sans">Desktop Hero Banner Background</label>
+                <p className="text-[10px] text-zinc-500 mb-3">Recommended size: 1920 x 1080 pixels (Aspect Ratio 16:9)</p>
                 <div className="flex items-center gap-4">
                   <div className="h-24 w-40 rounded border border-zinc-700 overflow-hidden flex items-center justify-center bg-zinc-950">
                     {heroImage ? (
@@ -384,7 +463,8 @@ export default function ProductForm({ initialData, isEdit = false, id }) {
 
               {/* Mobile Hero Image */}
               <div className="bg-zinc-800/40 p-4 border border-zinc-855 rounded-lg">
-                <label className="block text-xs font-semibold text-zinc-300 mb-3 font-sans">Mobile Hero Image</label>
+                <label className="block text-xs font-semibold text-zinc-300 mb-1 font-sans">Mobile Hero Banner Background</label>
+                <p className="text-[10px] text-zinc-500 mb-3">Recommended size: 1080 x 1920 pixels (Aspect Ratio 9:16)</p>
                 <div className="flex items-center gap-4">
                   <div className="h-24 w-20 rounded border border-zinc-700 overflow-hidden flex items-center justify-center bg-zinc-950">
                     {mobileHeroImage ? (
