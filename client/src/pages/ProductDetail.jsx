@@ -117,7 +117,7 @@ export default function ProductDetail() {
       ) : (
         <>
           {/* ── SECTION 1: FULL-WIDTH PRODUCT HERO ─────────────────────────────── */}
-          <section className="relative h-[100svh] min-h-[580px] flex items-end md:items-center overflow-hidden bg-primary-dark">
+          <section className="relative min-h-[80svh] md:h-[100svh] flex items-center overflow-hidden bg-primary-dark">
             {/* Background hero image */}
             {(product.heroImage || product.mobileHeroImage) ? (
               <div className="absolute inset-0">
@@ -128,17 +128,17 @@ export default function ProductDetail() {
                   <img
                     src={product.heroImage?.url || product.mobileHeroImage?.url}
                     alt={`${product.name} premium plywood`}
-                    className="w-full h-full object-cover object-center opacity-25"
+                    className="w-full h-full object-cover object-center opacity-45"
                   />
                 </picture>
-                <div className="absolute inset-0 bg-gradient-to-t from-primary-dark via-primary-dark/80 to-transparent md:bg-gradient-to-r md:from-primary-dark md:via-primary-dark/80 md:to-primary-dark/30" />
+                <div className="absolute inset-0 bg-gradient-to-t from-primary-dark/85 via-primary-dark/45 to-transparent md:bg-gradient-to-r md:from-primary-dark/75 md:via-primary-dark/55 md:to-primary-dark/15" />
               </div>
             ) : (
               <div className="absolute inset-0 bg-gradient-to-br from-primary-dark to-forest opacity-90" />
             )}
 
             {/* Content */}
-            <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-8 w-full pb-12 pt-28 md:py-20">
+            <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-8 w-full pt-28 pb-16 md:py-20">
               {/* Breadcrumb */}
               <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-[10px] font-semibold text-zinc-450 uppercase tracking-wider mb-6 md:mb-8">
                 <Link to="/" className="hover:text-brass transition-colors">Home</Link>
