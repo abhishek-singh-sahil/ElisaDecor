@@ -155,7 +155,7 @@ export default function ProductDetail() {
 
                 {/* H1 */}
                 <h1 className="text-4xl md:text-6xl font-bold font-serif text-white leading-tight tracking-tight">
-                  {getProductSEOH1(product)}
+                  {product.heroTitle || getProductSEOH1(product)}
                 </h1>
 
                 {/* Positioning statement */}

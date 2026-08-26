@@ -135,11 +135,11 @@ export default function Footer({ settings, products }) {
                 </a>
               </li>
             )}
-            {settings?.email && (
+            {(settings?.email || settings?.emailSettings?.businessEnquiryEmail) && (
               <li className="flex items-center gap-2.5">
                 <Mail size={16} className="text-accent flex-shrink-0" />
-                <a href={`mailto:${settings.email}`} className="hover:text-white transition-colors font-mono">
-                  {settings.email}
+                <a href={`mailto:${settings.email || settings.emailSettings.businessEnquiryEmail}`} className="hover:text-white transition-colors font-mono">
+                  {settings.email || settings.emailSettings.businessEnquiryEmail}
                 </a>
               </li>
             )}

@@ -102,13 +102,13 @@ export default function Contact() {
                 </li>
               )}
 
-              {settings?.email && (
+              {(settings?.email || settings?.emailSettings?.businessEnquiryEmail) && (
                 <li className="flex items-start gap-3">
                   <Mail className="text-accent h-5 w-5 flex-shrink-0 mt-0.5" />
                   <div>
                     <span className="block text-[10px] text-zinc-500 font-bold uppercase tracking-wider mb-0.5">Sales Desk</span>
-                    <a href={`mailto:${settings.email}`} className="font-semibold text-primary-dark font-mono hover:text-accent transition-colors">
-                      {settings.email}
+                    <a href={`mailto:${settings.email || settings.emailSettings.businessEnquiryEmail}`} className="font-semibold text-primary-dark font-mono hover:text-accent transition-colors">
+                      {settings.email || settings.emailSettings.businessEnquiryEmail}
                     </a>
                   </div>
                 </li>

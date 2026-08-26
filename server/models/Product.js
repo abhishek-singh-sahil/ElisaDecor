@@ -27,6 +27,10 @@ const ProductSchema = new mongoose.Schema(
       type: String,
       trim: true,
     },
+    heroTitle: {
+      type: String,
+      trim: true,
+    },
     logo: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Media',

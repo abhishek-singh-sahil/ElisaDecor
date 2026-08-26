@@ -28,6 +28,7 @@ export default function ProductForm({ initialData, isEdit = false, id }) {
   const [productCode, setProductCode] = useState(initialData?.productCode || '');
   const [shortDescription, setShortDescription] = useState(initialData?.shortDescription || '');
   const [longDescription, setLongDescription] = useState(initialData?.longDescription || '');
+  const [heroTitle, setHeroTitle] = useState(initialData?.heroTitle || '');
   const [status, setStatus] = useState(initialData?.status || 'DRAFT');
   const [sortOrder, setSortOrder] = useState(initialData?.sortOrder || 0);
 
@@ -158,6 +159,7 @@ export default function ProductForm({ initialData, isEdit = false, id }) {
       productCode,
       shortDescription,
       longDescription,
+      heroTitle,
       status,
       sortOrder: parseInt(sortOrder || '0'),
       logo: logo && typeof logo === 'object' ? logo._id : (logo || null),
@@ -299,6 +301,18 @@ export default function ProductForm({ initialData, isEdit = false, id }) {
                   placeholder="e.g. ELG-MR-01"
                   className="w-full rounded-lg bg-zinc-800 border border-zinc-700 px-4 py-2.5 text-sm text-white focus:outline-none focus:ring-1 focus:ring-emerald-500"
                 />
+              </div>
+
+              <div>
+                <label className="block text-xs font-semibold text-zinc-300 mb-1 font-sans">Product Page Hero Title (Custom Banner Writing)</label>
+                <input
+                  type="text"
+                  value={heroTitle}
+                  onChange={(e) => setHeroTitle(e.target.value)}
+                  placeholder="e.g. Elisa Green Premium Plywood (leaves blank for auto-generated)"
+                  className="w-full rounded-lg bg-zinc-800 border border-zinc-700 px-4 py-2.5 text-sm text-white focus:outline-none focus:ring-1 focus:ring-emerald-500"
+                />
+                <p className="text-[10px] text-zinc-500 mt-1">If left blank, it falls back to the default SEO auto-generated title.</p>
               </div>
 
               <div>
