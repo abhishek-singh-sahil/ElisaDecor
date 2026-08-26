@@ -117,7 +117,7 @@ export default function ProductDetail() {
       ) : (
         <>
           {/* ── SECTION 1: FULL-WIDTH PRODUCT HERO ─────────────────────────────── */}
-          <section className="relative h-[100svh] min-h-[500px] flex items-center overflow-hidden bg-primary-dark">
+          <section className="relative h-[100svh] min-h-[580px] flex items-end md:items-center overflow-hidden bg-primary-dark">
             {/* Background hero image */}
             {(product.heroImage || product.mobileHeroImage) ? (
               <div className="absolute inset-0">
@@ -131,38 +131,27 @@ export default function ProductDetail() {
                     className="w-full h-full object-cover object-center opacity-25"
                   />
                 </picture>
-                <div className="absolute inset-0 bg-gradient-to-r from-primary-dark via-primary-dark/80 to-primary-dark/30" />
+                <div className="absolute inset-0 bg-gradient-to-t from-primary-dark via-primary-dark/80 to-transparent md:bg-gradient-to-r md:from-primary-dark md:via-primary-dark/80 md:to-primary-dark/30" />
               </div>
             ) : (
               <div className="absolute inset-0 bg-gradient-to-br from-primary-dark to-forest opacity-90" />
             )}
 
             {/* Content */}
-            <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-8 w-full py-20">
+            <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-8 w-full pb-12 pt-28 md:py-20">
               {/* Breadcrumb */}
-              <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-[10px] font-semibold text-zinc-400 uppercase tracking-wider mb-8">
+              <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-[10px] font-semibold text-zinc-450 uppercase tracking-wider mb-6 md:mb-8">
                 <Link to="/" className="hover:text-brass transition-colors">Home</Link>
-                <ChevronRight size={10} />
+                <ChevronRight size={10} className="text-zinc-550" />
                 <Link to="/products" className="hover:text-brass transition-colors">Products</Link>
-                <ChevronRight size={10} />
+                <ChevronRight size={10} className="text-zinc-550" />
                 <span className="text-brass">{product.name}</span>
               </nav>
 
-              <div className="max-w-2xl space-y-6">
-                {/* Product Logo */}
-                {product.logo ? (
-                  <div className="mb-2">
-                    <img
-                      src={product.logo.url}
-                      alt={`${product.name} Logo`}
-                      className="h-20 md:h-28 w-auto object-contain"
-                    />
-                  </div>
-                ) : (
-                  <span className="text-xs font-bold tracking-widest text-brass uppercase block">
-                    ELISA DECOR
-                  </span>
-                )}
+              <div className="max-w-2xl space-y-5 md:space-y-6">
+                <span className="text-[10px] font-bold tracking-widest text-brass uppercase block">
+                  ELISA DECOR
+                </span>
 
                 {/* H1 */}
                 <h1 className="text-4xl md:text-6xl font-bold font-serif text-white leading-tight tracking-tight">
@@ -189,17 +178,17 @@ export default function ProductDetail() {
                 </div>
 
                 {/* CTAs */}
-                <div className="flex flex-wrap gap-4 pt-2">
+                <div className="flex flex-col sm:flex-row gap-4 pt-2">
                   <button
                     onClick={() => openEnquiry(product.slug)}
-                    className="inline-flex items-center gap-2 bg-brass hover:bg-accent text-white font-bold py-3.5 px-8 rounded text-xs uppercase tracking-wider transition-colors shadow-lg cursor-pointer"
+                    className="inline-flex items-center justify-center gap-2 bg-brass hover:bg-accent text-white font-bold py-4 px-8 rounded text-xs uppercase tracking-widest transition-colors shadow-lg cursor-pointer w-full sm:w-auto"
                   >
                     <Mail size={14} /> Enquire Now
                   </button>
                   {product.specifications?.length > 0 && (
                     <button
                       onClick={() => document.getElementById('tech-specs')?.scrollIntoView({ behavior: 'smooth' })}
-                      className="inline-flex items-center gap-2 bg-transparent hover:bg-white/10 text-white font-bold py-3.5 px-6 rounded text-xs border border-white/30 uppercase tracking-wider transition-colors cursor-pointer"
+                      className="inline-flex items-center justify-center gap-2 bg-transparent hover:bg-white/10 text-white font-bold py-4 px-6 rounded text-xs border border-white/30 uppercase tracking-widest transition-colors cursor-pointer w-full sm:w-auto"
                     >
                       Explore Specifications <ArrowRight size={12} />
                     </button>
