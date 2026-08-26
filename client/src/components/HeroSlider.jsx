@@ -42,7 +42,7 @@ export default function HeroSlider({ slides, settings, globalSettings, products,
           }`}
         >
           <img
-            src={slide.desktopImage || slide.image}
+            src={slide.image || slide.desktopImage}
             alt={slide.title}
             className={`w-full h-full object-cover object-center ${
               slides.length > 1

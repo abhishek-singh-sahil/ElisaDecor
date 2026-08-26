@@ -353,7 +353,7 @@ export default function AdminHomepage() {
                             </button>
                           </div>
                           <div className="text-[9px] text-zinc-500 font-mono flex items-center truncate break-all">
-                            {slide.image || 'No image linked'}
+                            {slide.image || slide.desktopImage || 'No image linked'}
                           </div>
                         </div>
                       </div>
